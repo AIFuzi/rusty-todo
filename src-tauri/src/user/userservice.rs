@@ -1,9 +1,13 @@
 pub mod user_service {
 
     #![allow(unused)]
+    use anyhow::{anyhow, Result};
+    use dotenv::dotenv;
     use jsonwebtoken::{decode, encode, EncodingKey, Header};
     use pwhash::bcrypt;
     use serde::{Deserialize, Serialize};
+    use std::collections::BTreeMap;
+    use uuid::Uuid;
 
     #[derive(Serialize, Deserialize)]
     struct UserClaims {
@@ -14,11 +18,18 @@ pub mod user_service {
 
     #[tauri::command]
     pub fn greet(name: String) -> String {
-        generate_jwt(0, String::from("userLogin"), String::from("userName"));
+        // generate_jwt(0, String::from("userLogin"), name.clone());
+        registration(
+            name.clone(),
+            String::from("awdwad"),
+            String::from("dwadadwa"),
+        );
         format!("Hello, {}! You've been greeted from Rust!", name)
     }
 
     fn generate_jwt(userid: i32, login: String, user_name: String) {
+        dotenv().ok();
+
         let user_claims: UserClaims = UserClaims {
             id: userid,
             login: String::from(login),
@@ -28,14 +39,26 @@ pub mod user_service {
         let token = encode(
             &Header::default(),
             &user_claims,
-            &EncodingKey::from_secret("-66612-3232-12+RwG".as_ref()),
+            &EncodingKey::from_secret(
+                std::env::var("TOKEN_SECRET_KEY")
+                    .expect("TOKEN_SECRET_KEY must be set.")
+                    .as_ref(),
+            ),
         )
         .unwrap();
 
         println!("Token: {}", token);
     }
 
-    pub fn registration(login: String, user_name: String, pass: String) {}
+    pub fn registration(login: String, user_name: String, pass: String) {
+        if (login.trim() != "" && user_name.trim() != "" && pass.trim() != "") {
+            let hash_password = bcrypt::hash(pass).unwrap();
+
+            let id = Uuid::new_v4();
+        } else {
+            println!("ERROR: fields empty!");
+        }
+    }
 
     pub fn login(login: String, pass: String) {
         //code
@@ -43,5 +66,15 @@ pub mod user_service {
 
     pub fn logout(login: String) {
         //code
+    }
+
+    #[tokio::main]
+    async fn treas() {
+        println!("dawdwadaw");
+    }
+
+    #[tokio::main]
+    async fn tesadas() {
+        println!("dawdaw");
     }
 }
