@@ -6,7 +6,11 @@ pub mod user_service {
     use jsonwebtoken::{decode, encode, EncodingKey, Header};
     use pwhash::bcrypt;
     use serde::{Deserialize, Serialize};
+    use sqlx::{postgres::PgPoolOptions, Pool};
+    use std::sync::Arc;
     use uuid::Uuid;
+
+    use crate::store::user_store;
 
     #[derive(Serialize, Deserialize)]
     struct UserClaims {
@@ -18,6 +22,7 @@ pub mod user_service {
     #[tauri::command]
     pub fn greet(name: String) -> String {
         // generate_jwt(0, String::from("userLogin"), name.clone());
+
         registration(
             name.clone(),
             String::from("awdwad"),
@@ -51,9 +56,8 @@ pub mod user_service {
 
     pub fn registration(login: String, user_name: String, pass: String) {
         if (login.trim() != "" && user_name.trim() != "" && pass.trim() != "") {
-            let hash_password = bcrypt::hash(pass).unwrap();
-
-            let id = Uuid::new_v4();
+            // let hash_password = bcrypt::hash(pass).unwrap();
+            // let id = Uuid::new_v4();
         } else {
             println!("ERROR: fields empty!");
         }

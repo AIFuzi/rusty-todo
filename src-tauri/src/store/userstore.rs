@@ -40,7 +40,7 @@ pub mod user_store {
             .map(|r| format!("{} - {}", r.get::<i32, _>("id"), r.get::<String, _>("name")))
             .collect::<Vec<String>>()
             .join(", ");
-        println!("all select: {}", bb);
+        println!("Rows {}", bb);
 
         Ok(())
     }

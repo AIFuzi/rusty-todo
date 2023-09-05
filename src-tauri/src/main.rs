@@ -9,9 +9,6 @@ mod user;
 #[tokio::main]
 async fn main() -> Result<()> {
     let ms = store::main_store::new().await?;
-    // store::user_store::create(&ms).await?;
-    // store::user_store::update(&ms).await?;
-    // store::user_store::select_all(&ms).await?;
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![user::user_service::greet])
