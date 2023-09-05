@@ -7,27 +7,40 @@ pub mod user_store {
     use sqlx::{FromRow, Row};
     use std::collections::BTreeMap;
 
-    pub async fn new() -> Result<(), sqlx::Error> {
-        let pool = PgPoolOptions::new()
-            .max_connections(5)
-            .connect("postgres://postgres:root@localhost/rusty-todo")
+    pub async fn create(pool: &sqlx::PgPool) -> Result<(), sqlx::Error> {
+        let query = "INSERT INTO test (name) VALUES ($1)";
+        sqlx::query(query)
+            .bind(String::from("User name from userstore"))
+            .execute(pool)
             .await?;
 
-        sqlx::query(r#"CREATE TABLE IF NOT EXISTS test (id bigserial, name text);"#)
-            .execute(&pool)
+        Ok(())
+    }
+
+    pub async fn update(pool: &sqlx::PgPool) -> Result<(), sqlx::Error> {
+        let query = "UPDATE test SET name = $1 WHERE id = $2";
+
+        sqlx::query(query)
+            .bind("Update from user store")
+            .bind(1)
+            .execute(pool)
             .await?;
 
-        // let row: (i64,) = sqlx::query_as("INSERT INTO test (name) VALUES ($1) returning id")
-        //     .bind("a new test field")
-        //     .fetch_one(&pool)
-        //     .await?;
-        let rows = sqlx::query("SELECT * FROM test").fetch_all(&pool).await?;
-        let str_result = rows
+        Ok(())
+    }
+
+    pub async fn select_all(pool: &sqlx::PgPool) -> Result<(), sqlx::Error> {
+        let q = "SELECT * FROM test";
+        let query = sqlx::query(q);
+
+        let rows = query.fetch_all(pool).await?;
+
+        let bb = rows
             .iter()
-            .map(|r| format!("{} - {}", r.get::<i64, _>("id"), r.get::<String, _>("name")))
+            .map(|r| format!("{} - {}", r.get::<i32, _>("id"), r.get::<String, _>("name")))
             .collect::<Vec<String>>()
             .join(", ");
-        println!("rows: {}", str_result);
+        println!("all select: {}", bb);
 
         Ok(())
     }
