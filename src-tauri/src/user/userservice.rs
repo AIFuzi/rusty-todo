@@ -6,7 +6,6 @@ pub mod user_service {
     use jsonwebtoken::{decode, encode, EncodingKey, Header};
     use pwhash::bcrypt;
     use serde::{Deserialize, Serialize};
-    use std::collections::BTreeMap;
     use uuid::Uuid;
 
     #[derive(Serialize, Deserialize)]
@@ -66,15 +65,5 @@ pub mod user_service {
 
     pub fn logout(login: String) {
         //code
-    }
-
-    #[tokio::main]
-    async fn treas() {
-        println!("dawdwadaw");
-    }
-
-    #[tokio::main]
-    async fn tesadas() {
-        println!("dawdaw");
     }
 }
