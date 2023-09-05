@@ -8,8 +8,6 @@ mod user;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    store::user_store::new().await;
-
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![user::user_service::greet])
         .run(tauri::generate_context!())
