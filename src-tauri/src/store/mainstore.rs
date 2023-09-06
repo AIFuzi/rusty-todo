@@ -16,10 +16,27 @@ pub mod main_store {
         ))
         .await?;
 
-        sqlx::query(r#"CREATE TABLE IF NOT EXISTS test (id serial, name text)"#)
-            .execute(&pool)
-            .await?;
-
         Ok(pool)
+    }
+
+    pub async fn create_tables(pool: sqlx::PgPool) -> Result<(), sqlx::Error> {
+        sqlx::query(
+            r#"CREATE TABLE IF NOT EXISTS users (id serial, 
+            user_login text, 
+            user_name text, 
+            password text, 
+            access_token text);
+            "#,
+        )
+        .execute(&pool)
+        .await?;
+
+        Ok(())
+    }
+
+    pub async fn drop_all_tables(pool: sqlx::PgPool) -> Result<(), sqlx::Error> {
+        sqlx::query(r#"DROP TABLE users;"#).execute(&pool).await?;
+
+        Ok(())
     }
 }

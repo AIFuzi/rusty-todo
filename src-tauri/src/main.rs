@@ -11,6 +11,12 @@ mod user;
 async fn main() -> Result<()> {
     let db_store = store::main_store::new().await?;
 
+    // ONLY FOR ONE-TIME TABLE CREATE
+    store::main_store::create_tables(db_store.clone()).await?;
+
+    //UNCOMMENT THIS LINE AND COMMENT OUT THE CREATE LINE IF YOU NEED TO DELETE TABLES
+    //store::main_store::drop_all_tables(db_store.clone()).await?;
+
     tauri::Builder::default()
         .manage(db_store)
         .invoke_handler(tauri::generate_handler![
