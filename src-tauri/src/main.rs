@@ -3,15 +3,20 @@
 
 use anyhow::Result;
 
+mod error;
 mod store;
 mod user;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let ms = store::main_store::new().await?;
+    let db_store = store::main_store::new().await?;
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![user::user_service::greet])
+        .manage(db_store)
+        .invoke_handler(tauri::generate_handler![
+            user::user_service::test,
+            user::user_service::regtt
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 

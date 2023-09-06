@@ -7,12 +7,9 @@ pub mod user_store {
     use sqlx::{FromRow, Row};
     use std::collections::BTreeMap;
 
-    pub async fn create(pool: &sqlx::PgPool) -> Result<(), sqlx::Error> {
+    pub async fn create(pool: &sqlx::PgPool, t_name: String) -> Result<(), sqlx::Error> {
         let query = "INSERT INTO test (name) VALUES ($1)";
-        sqlx::query(query)
-            .bind(String::from("User name from userstore"))
-            .execute(pool)
-            .await?;
+        sqlx::query(query).bind(t_name).execute(pool).await?;
 
         Ok(())
     }

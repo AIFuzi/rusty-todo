@@ -8,8 +8,10 @@ pub mod user_service {
     use serde::{Deserialize, Serialize};
     use sqlx::{postgres::PgPoolOptions, Pool};
     use std::sync::Arc;
+    use tauri::State;
     use uuid::Uuid;
 
+    use crate::error::CommandResult;
     use crate::store::user_store;
 
     #[derive(Serialize, Deserialize)]
@@ -69,5 +71,28 @@ pub mod user_service {
 
     pub fn logout(login: String) {
         //code
+    }
+
+    #[tauri::command]
+    pub async fn test(name: String, state: State<'_, sqlx::PgPool>) -> CommandResult<String> {
+        let pool = state.inner();
+
+        user_store::select_all(&pool).await?;
+
+        Ok(format!("Hello, {}! You've been greeted from Rust!", name))
+    }
+
+    #[tauri::command]
+    pub async fn regtt(name: String, state: State<'_, sqlx::PgPool>) -> CommandResult<()> {
+        let pool = state.inner();
+
+        if (name.trim() != "") {
+            user_store::create(&pool, name.clone()).await?;
+            println!("Create user: {}", name.clone());
+        } else {
+            println!("ERROR: Empty value");
+        }
+
+        Ok(())
     }
 }
