@@ -31,11 +31,32 @@ pub mod main_store {
         .execute(&pool)
         .await?;
 
+        sqlx::query(
+            r#"CREATE TABLE IF NOT EXISTS projects (id serial,
+            user_id serial,
+            project_name text);"#,
+        )
+        .execute(&pool)
+        .await?;
+
+        sqlx::query(
+            r#"CREATE TABLE IF NOT EXISTS tasks (id serial,
+            user_id serial,
+            project_id serial,
+            project_name text,
+            priority serial,
+            completed boolean);"#,
+        )
+        .execute(&pool)
+        .await?;
+
         Ok(())
     }
 
     pub async fn drop_all_tables(pool: sqlx::PgPool) -> Result<(), sqlx::Error> {
-        sqlx::query(r#"DROP TABLE users;"#).execute(&pool).await?;
+        sqlx::query(r#"DROP TABLE users, projects, tasks;"#)
+            .execute(&pool)
+            .await?;
 
         Ok(())
     }
