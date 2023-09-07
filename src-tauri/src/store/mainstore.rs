@@ -58,6 +58,16 @@ pub mod main_store {
             .execute(&pool)
             .await?;
 
+        println!("SUCCESS: All tables has deleted!");
+
+        Ok(())
+    }
+
+    pub async fn clear_all_info(pool: sqlx::PgPool) -> Result<(), sqlx::Error> {
+        sqlx::query(r#"DELETE FROM users;"#).execute(&pool).await?;
+
+        println!("SUCCESS: All info in tables has deleted!");
+
         Ok(())
     }
 }

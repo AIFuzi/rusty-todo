@@ -14,8 +14,11 @@ async fn main() -> Result<()> {
     // ONLY FOR ONE-TIME TABLE CREATE
     store::main_store::create_tables(db_store.clone()).await?;
 
-    //UNCOMMENT THIS LINE AND COMMENT OUT THE CREATE LINE IF YOU NEED TO DELETE TABLES
+    //UNCOMMENT THIS LINE IF YOU NEED TO DELETE TABLES
     //store::main_store::drop_all_tables(db_store.clone()).await?;
+
+    //UNCOMMENT THIS LINE IF YOU NEED TO CLEAR TABLE INFO
+    // store::main_store::clear_all_info(db_store.clone()).await?;
 
     tauri::Builder::default()
         .manage(db_store)
