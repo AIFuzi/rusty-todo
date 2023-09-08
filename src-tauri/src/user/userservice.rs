@@ -2,12 +2,12 @@ pub mod user_service {
 
     #![allow(unused)]
     use anyhow::{anyhow, Result};
+    use chrono::Utc;
     use dotenv::dotenv;
     use jsonwebtoken::{decode, encode, EncodingKey, Header};
     use pwhash::bcrypt;
     use serde::{Deserialize, Serialize};
     use sqlx::{postgres::PgPoolOptions, Pool};
-    use std::sync::Arc;
     use tauri::State;
     use uuid::Uuid;
 
@@ -16,30 +16,18 @@ pub mod user_service {
 
     #[derive(Serialize, Deserialize)]
     struct UserClaims {
-        id: i32,
-        login: String,
+        user_login: String,
         user_name: String,
+        token_date: String,
     }
 
-    #[tauri::command]
-    pub fn greet(name: String) -> String {
-        // generate_jwt(0, String::from("userLogin"), name.clone());
-
-        registration(
-            name.clone(),
-            String::from("awdwad"),
-            String::from("dwadadwa"),
-        );
-        format!("Hello, {}! You've been greeted from Rust!", name)
-    }
-
-    fn generate_jwt(userid: i32, login: String, user_name: String) {
+    fn generate_jwt(login: String, name: String) -> String {
         dotenv().ok();
 
         let user_claims: UserClaims = UserClaims {
-            id: userid,
-            login: String::from(login),
-            user_name: String::from(user_name),
+            user_login: login,
+            user_name: name,
+            token_date: Utc::now().to_string(),
         };
 
         let token = encode(
@@ -53,16 +41,36 @@ pub mod user_service {
         )
         .unwrap();
 
-        println!("Token: {}", token);
+        token
     }
 
-    pub fn registration(login: String, user_name: String, pass: String) {
-        if (login.trim() != "" && user_name.trim() != "" && pass.trim() != "") {
-            // let hash_password = bcrypt::hash(pass).unwrap();
-            // let id = Uuid::new_v4();
+    // #[tauri::command]
+    pub async fn registration(
+        state: State<'_, sqlx::PgPool>,
+        user_login: String,
+        user_name: String,
+        pass: String,
+    ) -> CommandResult<()> {
+        let pool = state.inner();
+
+        if (user_login.trim() != "" && user_name.trim() != "" && pass.trim() != "") {
+            let hash_password = bcrypt::hash(pass).unwrap();
+            let token = generate_jwt(user_login.clone(), user_name.clone());
+
+            user_store::create_user(
+                &pool,
+                user_login.clone(),
+                user_name.clone(),
+                hash_password,
+                token,
+            )
+            .await?;
+            println!("SUCCESS: User created");
         } else {
             println!("ERROR: fields empty!");
         }
+
+        Ok(())
     }
 
     pub fn login(login: String, pass: String) {
@@ -77,35 +85,31 @@ pub mod user_service {
     pub async fn test(name: String, state: State<'_, sqlx::PgPool>) -> CommandResult<String> {
         let pool = state.inner();
 
-        // user_store::get_all_users(&pool).await?;
-        // let stt: String = user_store::get_one_user_id_by_login(&pool, name.clone()).await?;
+        user_store::get_all_users(&pool).await?;
+        // let stt: String = user_store::get_one_user_id_by_login(&pool, nameeclone()).await?;
         //
         // println!("One user: {}", stt);
 
-        user_store::update_user_info(&pool);
+        // user_store::update_user_info(&pool).await?;
 
         Ok(format!("Hello, {}! You've been greeted from Rust!", name))
     }
 
     #[tauri::command]
-    pub async fn regtt(name: String, state: State<'_, sqlx::PgPool>) -> CommandResult<()> {
+    pub async fn regtt(name: String, state: State<'_, sqlx::PgPool>) -> CommandResult<String> {
         let pool = state.inner();
 
-        if (name.trim() != "") {
-            user_store::create_user(
-                &pool,
-                String::from("login"),
-                name.clone(),
-                String::from("pass"),
-                String::from("token"),
-            )
-            .await?;
-            //user_store::create(&pool, name.clone()).await?;
-            println!("Create user: {}", name.clone());
-        } else {
-            println!("ERROR: Empty value");
-        }
+        registration(
+            state,
+            String::from("LOGIN"),
+            name.clone(),
+            String::from("FAW2dff"),
+        )
+        .await?;
 
-        Ok(())
+        Ok(format!(
+            "Hello, {}! You've been greeted from Rust!",
+            name.clone()
+        ))
     }
 }

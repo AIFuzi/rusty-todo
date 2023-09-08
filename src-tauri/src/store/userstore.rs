@@ -10,12 +10,12 @@ pub mod user_store {
     use crate::error::CommandResult;
 
     #[derive(Serialize, Deserialize)]
-    pub struct UserClaimsData {
-        id: i32,
-        user_login: String,
-        user_name: String,
-        password: String,
-        access_token: String,
+    pub struct UserData {
+        pub id: i32,
+        pub user_login: String,
+        pub user_name: String,
+        pub password: String,
+        pub access_token: String,
     }
 
     pub async fn create_user(
@@ -38,15 +38,13 @@ pub mod user_store {
     }
 
     pub async fn update_user_info(pool: &sqlx::PgPool) -> Result<(), sqlx::Error> {
-        println!("awdwadaw");
+        let query = "UPDATE users SET user_name = $1 WHERE id = $2";
 
-        // let query = "UPDATE users SET user_name = UwU WHERE id = 5";
-        //
-        // sqlx::query(query)
-        //     .bind(String::from("UPDATE"))
-        //     .bind(5)
-        //     .execute(pool)
-        //     .await?;
+        sqlx::query(query)
+            .bind(String::from("UPDATE"))
+            .bind(5)
+            .execute(pool)
+            .await?;
 
         Ok(())
     }
@@ -85,7 +83,7 @@ pub mod user_store {
             .fetch_optional(pool)
             .await?;
 
-        let user = query.map(|r| UserClaimsData {
+        let user = query.map(|r| UserData {
             id: r.get("id"),
             user_login: r.get("user_login"),
             user_name: r.get("user_name"),
