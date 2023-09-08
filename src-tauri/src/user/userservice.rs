@@ -77,7 +77,12 @@ pub mod user_service {
     pub async fn test(name: String, state: State<'_, sqlx::PgPool>) -> CommandResult<String> {
         let pool = state.inner();
 
-        user_store::select_all(&pool).await?;
+        // user_store::get_all_users(&pool).await?;
+        // let stt: String = user_store::get_one_user_id_by_login(&pool, name.clone()).await?;
+        //
+        // println!("One user: {}", stt);
+
+        user_store::update_user_info(&pool);
 
         Ok(format!("Hello, {}! You've been greeted from Rust!", name))
     }
@@ -87,7 +92,15 @@ pub mod user_service {
         let pool = state.inner();
 
         if (name.trim() != "") {
-            user_store::create(&pool, name.clone()).await?;
+            user_store::create_user(
+                &pool,
+                String::from("login"),
+                name.clone(),
+                String::from("pass"),
+                String::from("token"),
+            )
+            .await?;
+            //user_store::create(&pool, name.clone()).await?;
             println!("Create user: {}", name.clone());
         } else {
             println!("ERROR: Empty value");
