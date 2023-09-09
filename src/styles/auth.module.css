@@ -7,13 +7,15 @@
 }
 
 .auth__back {
-  padding: 15%;
+  padding: 5% 15%;
   background: #333;
   display: flex;
   flex-direction: column;
   border: 2px solid #666;
   border-radius: 25px;
   box-shadow: 0px 0px 32px 5px rgba(51, 51, 51, 0.2);
+  max-width: 70%;
+  max-height: 90%;
 }
 
 .auth__text {

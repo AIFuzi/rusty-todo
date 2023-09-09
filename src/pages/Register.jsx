@@ -19,6 +19,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirPassword, setConfirmPassword] = useState("");
+  const [token, setToken] = useState("");
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -31,11 +32,15 @@ const Register = () => {
       password.trim() !== "" &&
       confirPassword.trim() !== ""
     ) {
-      await invoke("register_user", {
-        userLogin: login,
-        userName: name,
-        pass: password,
-      });
+      setToken(
+        await invoke("register_user", {
+          userLogin: login,
+          userName: name,
+          pass: password,
+        })
+      );
+
+      localStorage.setItem("tok", token);
 
       messageApi.open({
         type: "success",

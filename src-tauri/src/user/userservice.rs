@@ -53,16 +53,17 @@ pub mod user_service {
     ) -> CommandResult<String> {
         let pool = state.inner();
 
+        let mut token: String = String::from("");
         if (user_login.trim() != "" && user_name.trim() != "" && pass.trim() != "") {
             let hash_password = bcrypt::hash(pass).unwrap();
-            let token = generate_jwt(user_login.clone(), user_name.clone());
+            token = generate_jwt(user_login.clone(), user_name.clone());
 
             user_store::create_user(
                 &pool,
                 user_login.clone(),
                 user_name.clone(),
                 hash_password,
-                token,
+                token.clone(),
             )
             .await?;
             println!("SUCCESS: User created");
@@ -70,7 +71,7 @@ pub mod user_service {
             println!("ERROR: fields empty!");
         }
 
-        Ok(format!("User cre {} ", user_name.clone()))
+        Ok(format!("{} ", token.clone()))
     }
 
     pub fn login(login: String, pass: String) {
