@@ -22,10 +22,7 @@ async fn main() -> Result<()> {
 
     tauri::Builder::default()
         .manage(db_store)
-        .invoke_handler(tauri::generate_handler![
-            user::user_service::test,
-            user::user_service::regtt
-        ])
+        .invoke_handler(tauri::generate_handler![user::user_service::register_user])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 

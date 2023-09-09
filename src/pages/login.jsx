@@ -1,5 +1,5 @@
 import { Button, Checkbox, ConfigProvider, Input, Space, theme } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authStyle from "../styles/auth.module.css";
 import Title from "antd/es/typography/Title";
@@ -23,10 +23,14 @@ const Login = () => {
       <div className={authStyle.auth__wrapp}>
         <div className={authStyle.auth__back}>
           <Title>SIGN IN</Title>
-
           <Space direction="vertical" size="middle">
             <Input size="large" placeholder="Login" />
-            <Input size="large" type="password" placeholder="Password" />
+            <Input
+              size="large"
+              status=""
+              type="password"
+              placeholder="Password"
+            />
 
             <div>
               <Checkbox>Remember me</Checkbox>
@@ -39,7 +43,7 @@ const Login = () => {
             </div>
 
             <Button type="primary" size="large">
-              Sign up
+              Sign in
             </Button>
           </Space>
         </div>

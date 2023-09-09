@@ -44,13 +44,13 @@ pub mod user_service {
         token
     }
 
-    // #[tauri::command]
-    pub async fn registration(
-        state: State<'_, sqlx::PgPool>,
+    #[tauri::command]
+    pub async fn register_user(
         user_login: String,
         user_name: String,
         pass: String,
-    ) -> CommandResult<()> {
+        state: State<'_, sqlx::PgPool>,
+    ) -> CommandResult<String> {
         let pool = state.inner();
 
         if (user_login.trim() != "" && user_name.trim() != "" && pass.trim() != "") {
@@ -70,7 +70,7 @@ pub mod user_service {
             println!("ERROR: fields empty!");
         }
 
-        Ok(())
+        Ok(format!("User cre {} ", user_name.clone()))
     }
 
     pub fn login(login: String, pass: String) {
@@ -79,37 +79,5 @@ pub mod user_service {
 
     pub fn logout(login: String) {
         //code
-    }
-
-    #[tauri::command]
-    pub async fn test(name: String, state: State<'_, sqlx::PgPool>) -> CommandResult<String> {
-        let pool = state.inner();
-
-        user_store::get_all_users(&pool).await?;
-        // let stt: String = user_store::get_one_user_id_by_login(&pool, nameeclone()).await?;
-        //
-        // println!("One user: {}", stt);
-
-        // user_store::update_user_info(&pool).await?;
-
-        Ok(format!("Hello, {}! You've been greeted from Rust!", name))
-    }
-
-    #[tauri::command]
-    pub async fn regtt(name: String, state: State<'_, sqlx::PgPool>) -> CommandResult<String> {
-        let pool = state.inner();
-
-        registration(
-            state,
-            String::from("LOGIN"),
-            name.clone(),
-            String::from("FAW2dff"),
-        )
-        .await?;
-
-        Ok(format!(
-            "Hello, {}! You've been greeted from Rust!",
-            name.clone()
-        ))
     }
 }
