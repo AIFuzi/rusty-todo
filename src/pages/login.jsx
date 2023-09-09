@@ -1,12 +1,19 @@
 import { Button, Checkbox, Input, Space } from 'antd';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authStyle from '../styles/auth.module.css';
 import Title from 'antd/es/typography/Title';
 import Link from 'antd/es/typography/Link';
+import { AuthContext } from '../context/context';
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const { setIsAuth } = useContext(AuthContext);
+  const login = () => {
+    setIsAuth(true);
+    localStorage.setItem('tok', 'awdaw');
+  };
 
   return (
     <div className={authStyle.auth__wrapp}>
@@ -31,7 +38,9 @@ const Login = () => {
             <Link onClick={() => navigate('/registation')}>Sign up</Link>
           </div>
 
-          <Button type='primary' size='large'>
+          <Link onClick={() => navigate('/todo')}>todo</Link>
+
+          <Button onClick={login} type='primary' size='large'>
             Sign in
           </Button>
         </Space>
