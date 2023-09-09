@@ -6,13 +6,13 @@ import Register from "../pages/Register";
 const AppRouter = () => {
   return (
     <Routes>
-      {PublicRoutes.map((route) => {
+      {PublicRoutes.map((route) => (
         <Route
           key={route.path}
           path={route.path}
           element={<route.component />}
-        />;
-      })}
+        />
+      ))}
       <Route path="/*" element={<Register />} />
     </Routes>
   );

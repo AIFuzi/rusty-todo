@@ -1,5 +1,5 @@
 import Register from "../pages/Register";
-import Login from "../pages/login";
+import Login from "../pages/Login";
 
 export const PublicRoutes = [
   { path: "/register", component: Register },
