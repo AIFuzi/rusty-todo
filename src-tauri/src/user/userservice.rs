@@ -57,7 +57,12 @@ pub mod user_service {
         let mut token: String = String::from("");
 
         if (user_login.clone().trim() != "" && user_name.trim() != "" && pass.trim() != "") {
-            if (user_store::get_users_count(&pool, user_login.clone()).await? == 0) {
+            if (!user_store::get_one_user(&pool, user_login.clone())
+                .await?
+                .is_some())
+            {
+                user_store::get_one_user(&pool, user_login.clone()).await?;
+
                 let hash_password = bcrypt::hash(pass).unwrap();
                 token = generate_jwt(user_login.clone(), user_name.clone());
 

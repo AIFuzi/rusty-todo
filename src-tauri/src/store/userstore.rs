@@ -96,21 +96,22 @@ pub mod user_store {
         Ok(res_id)
     }
 
-    pub async fn get_one_user(pool: &sqlx::PgPool, login: String) -> Result<UserData, sqlx::Error> {
+    pub async fn get_one_user(
+        pool: &sqlx::PgPool,
+        login: String,
+    ) -> Result<Option<UserData>, sqlx::Error> {
         let query = sqlx::query("SELECT * FROM users WHERE user_name = $1")
             .bind(login)
-            .fetch_one(pool)
+            .fetch_optional(pool)
             .await?;
 
-        let user_res = UserData {
-            id: query.get("id"),
-            user_login: query.get("user_login"),
-            user_name: query.get("user_name"),
-            password: query.get("password"),
-            access_token: query.get("access_token"),
-        };
-
-        println!("{}", user_res.id);
+        let user_res = query.map(|row| UserData {
+            id: row.get("id"),
+            user_login: row.get("user_login"),
+            user_name: row.get("user_name"),
+            password: row.get("password"),
+            access_token: row.get("access_token"),
+        });
 
         Ok(user_res)
     }
