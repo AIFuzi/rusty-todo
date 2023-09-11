@@ -24,6 +24,7 @@ const Register = () => {
 
   const loginUser = (token) => {
     localStorage.setItem('tok', token);
+    localStorage.setItem('us_lg', login);
     setIsAuth(true);
   };
 

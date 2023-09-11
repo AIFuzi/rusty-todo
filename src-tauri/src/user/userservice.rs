@@ -128,7 +128,12 @@ pub mod user_service {
         Ok(res_message)
     }
 
-    pub fn logout(login: String) {
-        //code
+    #[tauri::command]
+    pub async fn logout_user(login: String, state: State<'_, sqlx::PgPool>) -> CommandResult<()> {
+        let pool = state.inner();
+
+        user_store::update_user_token(pool, login, String::from("")).await?;
+
+        Ok(())
     }
 }

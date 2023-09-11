@@ -25,7 +25,8 @@ async fn main() -> Result<()> {
         .invoke_handler(tauri::generate_handler![
             // User
             user::user_service::register_user,
-            user::user_service::login_user
+            user::user_service::login_user,
+            user::user_service::logout_user,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
