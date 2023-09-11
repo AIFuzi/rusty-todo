@@ -15,14 +15,18 @@ async fn main() -> Result<()> {
     store::main_store::create_tables(db_store.clone()).await?;
 
     //UNCOMMENT THIS LINE IF YOU NEED TO DELETE TABLES
-    //store::main_store::drop_all_tables(db_store.clone()).await?;
+    // store::main_store::drop_all_tables(db_store.clone()).await?;
 
     //UNCOMMENT THIS LINE IF YOU NEED TO CLEAR TABLE INFO
     // store::main_store::clear_all_info(db_store.clone()).await?;
 
     tauri::Builder::default()
         .manage(db_store)
-        .invoke_handler(tauri::generate_handler![user::user_service::register_user])
+        .invoke_handler(tauri::generate_handler![
+            // User
+            user::user_service::register_user,
+            user::user_service::login_user
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 

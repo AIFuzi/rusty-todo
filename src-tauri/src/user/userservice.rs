@@ -61,8 +61,6 @@ pub mod user_service {
                 .await?
                 .is_some())
             {
-                user_store::get_one_user(&pool, user_login.clone()).await?;
-
                 let hash_password = bcrypt::hash(pass).unwrap();
                 token = generate_jwt(user_login.clone(), user_name.clone());
 
@@ -83,12 +81,51 @@ pub mod user_service {
             res_message = String::from("ERROR:Fields empty");
         }
 
-        // println!("{}", token);
         Ok(format!("{}", res_message))
     }
 
-    pub fn login(login: String, pass: String) {
-        //code
+    #[tauri::command]
+    pub async fn login_user(
+        login: String,
+        pass: String,
+        state: State<'_, sqlx::PgPool>,
+    ) -> CommandResult<String> {
+        let pool = state.inner();
+        let mut res_message = String::from("");
+
+        if (login.trim() != "" && pass.trim() != "") {
+            if (user_store::get_one_user(pool, login.clone())
+                .await?
+                .is_some())
+            {
+                if (bcrypt::verify(
+                    pass,
+                    &user_store::get_one_user(pool, login.clone())
+                        .await?
+                        .expect("None value")
+                        .password,
+                )) {
+                    let token: String = generate_jwt(
+                        login.clone(),
+                        user_store::get_one_user(pool, login.clone())
+                            .await?
+                            .expect("None value")
+                            .user_name,
+                    );
+                    user_store::update_user_token(&pool, login.clone(), token.clone()).await?;
+
+                    res_message = format!("SUCCESS:{}", token.clone());
+                } else {
+                    res_message = String::from("ERROR:Invalid password");
+                }
+            } else {
+                res_message = String::from("ERROR:User does not exists");
+            }
+        } else {
+            res_message = String::from("ERROR:Fields empty");
+        }
+
+        Ok(res_message)
     }
 
     pub fn logout(login: String) {

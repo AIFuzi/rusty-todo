@@ -37,18 +37,6 @@ pub mod user_store {
         Ok(())
     }
 
-    pub async fn update_user_info(pool: &sqlx::PgPool) -> Result<(), sqlx::Error> {
-        let query = "UPDATE users SET user_name = $1 WHERE id = $2";
-
-        sqlx::query(query)
-            .bind(String::from("UPDATE"))
-            .bind(5)
-            .execute(pool)
-            .await?;
-
-        Ok(())
-    }
-
     pub async fn get_all_users(pool: &sqlx::PgPool) -> Result<(), sqlx::Error> {
         let q = "SELECT * FROM users;";
         let query = sqlx::query(q);
@@ -94,7 +82,21 @@ pub mod user_store {
         Ok(user_res)
     }
 
-    pub async fn get_users_count(pool: &sqlx::PgPool, login: String) -> Result<i64, sqlx::Error> {
+    pub async fn update_user_token(
+        pool: &sqlx::PgPool,
+        login: String,
+        new_token: String,
+    ) -> Result<(), sqlx::Error> {
+        let query = sqlx::query("UPDATE users SET access_token = $1 WHERE user_login = $2")
+            .bind(new_token)
+            .bind(login)
+            .execute(pool)
+            .await?;
+
+        Ok(())
+    }
+
+    async fn get_users_count(pool: &sqlx::PgPool, login: String) -> Result<i64, sqlx::Error> {
         let query = sqlx::query("SELECT COUNT(*) FROM users WHERE user_login = $1")
             .bind(login)
             .fetch_one(pool)
