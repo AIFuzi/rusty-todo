@@ -6,6 +6,7 @@ import Title from 'antd/es/typography/Title';
 import Link from 'antd/es/typography/Link';
 import { invoke } from '@tauri-apps/api';
 import { AuthContext } from '../context/context';
+import { getErrorMessage } from '../messages/message';
 
 const Register = () => {
   const [login, setLogin] = useState('');
@@ -34,31 +35,25 @@ const Register = () => {
         loginUser(res[1]);
       } else {
         setInputDisable(false);
-        errorMessage(res[1]);
+        getErrorMessage(res[1], messageApi);
         setError(res[1]);
       }
     }
   }, [result]);
 
-  const errorMessage = (message) => {
-    messageApi.open({
-      type: 'error',
-      content: message,
-    });
-  };
-
   const registerUser = async () => {
     if (login.trim() == '') {
-      errorMessage('Login field empty');
+      // errorMessage('Login field empty');
+      getErrorMessage('Login field empty', messageApi);
       return;
     } else if (name.trim() == '') {
-      errorMessage('Name field empty');
+      getErrorMessage('Name field empty', messageApi);
       return;
     } else if (password.trim() == '' && confirPassword.trim() == '') {
-      errorMessage('Password field empty');
+      getErrorMessage('Password field empty', messageApi);
       return;
     } else if (password !== confirPassword) {
-      errorMessage('Password dont math');
+      getErrorMessage('Password dont math', messageApi);
       return;
     }
 
@@ -74,7 +69,7 @@ const Register = () => {
 
     if (error) {
       setInputDisable(false);
-      errorMessage(error);
+      getErrorMessage(error, messageApi);
     }
   };
 
