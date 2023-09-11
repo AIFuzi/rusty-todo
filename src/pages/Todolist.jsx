@@ -11,9 +11,8 @@ const Todolist = () => {
     // localStorage.removeItem('tok');
 
     console.log(localStorage.getItem('us_lg'));
-    await invoke('logout_user', { login: localStorage.getItem('us_lg') });
+    await invoke('logout_user', { token: localStorage.getItem('tok') });
     localStorage.removeItem('tok');
-    localStorage.removeItem('us_lg');
     setIsAuth(false);
   };
 

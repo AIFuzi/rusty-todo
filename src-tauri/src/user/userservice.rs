@@ -4,7 +4,7 @@ pub mod user_service {
     use anyhow::{anyhow, Result};
     use chrono::Utc;
     use dotenv::dotenv;
-    use jsonwebtoken::{decode, encode, EncodingKey, Header};
+    use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
     use pwhash::bcrypt;
     use serde::{Deserialize, Serialize};
     use sqlx::{postgres::PgPoolOptions, Pool};
@@ -19,6 +19,7 @@ pub mod user_service {
         user_login: String,
         user_name: String,
         token_date: String,
+        exp: usize,
     }
 
     fn generate_jwt(login: String, name: String) -> String {
@@ -28,6 +29,7 @@ pub mod user_service {
             user_login: login,
             user_name: name,
             token_date: Utc::now().to_string(),
+            exp: 1000 * 60 * 30 * 24 * 1000 * 79,
         };
 
         let token = encode(
@@ -129,10 +131,26 @@ pub mod user_service {
     }
 
     #[tauri::command]
-    pub async fn logout_user(login: String, state: State<'_, sqlx::PgPool>) -> CommandResult<()> {
+    pub async fn logout_user(token: String, state: State<'_, sqlx::PgPool>) -> CommandResult<()> {
         let pool = state.inner();
+        dotenv().ok();
 
-        user_store::update_user_token(pool, login, String::from("")).await?;
+        let current_user_token = decode::<UserClaims>(
+            &token,
+            &DecodingKey::from_secret(
+                std::env::var("TOKEN_SECRET_KEY")
+                    .expect("Secret token not valid")
+                    .as_ref(),
+            ),
+            &Validation::new(jsonwebtoken::Algorithm::HS256),
+        );
+
+        user_store::update_user_token(
+            pool,
+            current_user_token.expect("").claims.user_login,
+            String::from(""),
+        )
+        .await?;
 
         Ok(())
     }

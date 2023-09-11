@@ -36,7 +36,6 @@ const Login = () => {
 
   const setLoginUser = (token) => {
     localStorage.setItem('tok', token);
-    localStorage.setItem('us_lg', login);
     setIsAuth(true);
   };
 
