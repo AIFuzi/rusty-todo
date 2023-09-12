@@ -1,0 +1,48 @@
+.todo__wrapper
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+.todo__left__pannel
+{
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+  height: 100vh;
+}
+
+.todo__center__pannel
+{
+  width: 70vw;
+  height: 100vh;
+  border: solid 2px green;
+}
+
+.todo__right__pannel
+{
+  width: 30vw;
+  height: 100vh;
+  border: solid 2px pink;
+}
+
+.todo__user__pannel
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.todo__projects__title
+{
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo__scroll
+{
+  margin-top: 10px;
+  overflow: auto;
+}
