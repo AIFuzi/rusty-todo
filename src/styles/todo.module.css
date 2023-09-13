@@ -1,3 +1,18 @@
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  /* background: rgba(255, 11, 255, 0.2); */
+  background: #434343;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
 .todo__wrapper
 {
   display: flex;
@@ -19,14 +34,12 @@
 {
   width: 70vw;
   height: 100vh;
-  border: solid 2px green;
 }
 
 .todo__right__pannel
 {
   width: 30vw;
   height: 100vh;
-  border: solid 2px pink;
 }
 
 .todo__user__pannel
@@ -45,4 +58,93 @@
 {
   margin-top: 10px;
   overflow: auto;
+}
+
+.todo__center__wrap
+{
+  padding: 20px;
+}
+
+.todo__center__title
+{
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+
+.title__job
+{
+  margin-top: 5px;
+  opacity: 0.5;
+}
+
+.stats__wrap
+{
+  margin-top: 20px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.stats__day
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  color: #fff;
+  margin-right: 30px;
+}
+
+.stats__day > h2
+{
+  opacity: 0.5;
+}
+
+.stats__day > h3
+{
+  opacity: 0.5;
+}
+
+.task
+{
+  margin: 25px 10px;
+  width: 90%;
+  height: 80px;
+  border-radius: 15px;
+  box-shadow: 0px 1px 10px 2px rgba(81, 81, 81, 0.12);
+}
+
+.task__scroll
+{
+  min-height: 60vh;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.task__content__wrap
+{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  flex-direction: row;
+  height: 100%;
+  margin: 15px;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+
+.task__content
+{
+  margin-left: 15px;
+}
+
+.task__low__priority
+{
+  color: #73d13d;
+}
+
+.task__addinput
+{
+  margin-top: 35px;
 }
