@@ -1,10 +1,12 @@
 import {
   Avatar,
   Button,
-  Checkbox,
   Input,
   Menu,
+  message,
+  Modal,
   Progress,
+  Space,
   Typography,
 } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
@@ -18,13 +20,17 @@ import {
 import todoStyle from '../styles/todo.module.css';
 import Link from 'antd/es/typography/Link';
 import TaskItem from '../components/tasks/TaskItem';
+import { getErrorMessage } from '../messages/message';
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 const Todolist = () => {
   const { setIsAuth } = useContext(AuthContext);
   const [index, setIndex] = useState(1);
   const [items, setItems] = useState([]);
+  const [modalProject, setModalProject] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const [messageApi, contextHolder] = message.useMessage();
 
   const logout = async () => {
     await invoke('logout_user', { token: localStorage.getItem('tok') });
@@ -33,16 +39,42 @@ const Todolist = () => {
   };
 
   const createProject = () => {
+    if (projectName.trim() == '') {
+      getErrorMessage('Project name empty', messageApi);
+      return;
+    }
     setIndex(index + 1);
     setItems([...items, {
-      label: `option ${index}`,
+      label: projectName,
       key: index,
       icon: <PieChartOutlined />,
     }]);
+
+    setProjectName('');
+    setModalProject(false);
+  };
+
+  const openProjectModal = () => {
+    setModalProject(true);
+  };
+
+  const handleCancel = () => {
+    setModalProject(false);
   };
 
   return (
     <div>
+      {contextHolder}
+      <Modal open={modalProject} onOk={createProject} onCancel={handleCancel}>
+        <Space direction='vertical' size='large' style={{ display: 'flex' }}>
+          <Title level={3}>Create project</Title>
+          <Input
+            placeholder='Project name'
+            onChange={(e) => setProjectName(e.target.value)}
+            value={projectName}
+          />
+        </Space>
+      </Modal>
       <div className={todoStyle.todo__wrapper}>
         <div className={todoStyle.todo__left__pannel}>
           <div className={todoStyle.todo__user__pannel}>
@@ -56,7 +88,7 @@ const Todolist = () => {
             <div className={todoStyle.todo__projects}>
               <div className={todoStyle.todo__projects__title}>
                 <Title level={3}>Projects</Title>
-                <Button type='text' onClick={createProject}>
+                <Button type='text' onClick={openProjectModal}>
                   <PlusOutlined
                     style={{ color: '#fff' }}
                   />
@@ -94,10 +126,6 @@ const Todolist = () => {
               </div>
               <div className={todoStyle.task__scroll}>
                 <div className={todoStyle.tasks__completed}>
-                  <TaskItem />
-                  <TaskItem />
-                  <TaskItem />
-                  <TaskItem />
                   <TaskItem />
                   <TaskItem />
                 </div>

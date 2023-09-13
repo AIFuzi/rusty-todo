@@ -117,7 +117,7 @@
 
 .task__scroll
 {
-  min-height: 60vh;
+  min-height: 90px;
   max-height: 60vh;
   overflow: auto;
 }
