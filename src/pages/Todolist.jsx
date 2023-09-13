@@ -38,11 +38,13 @@ const Todolist = () => {
     setIsAuth(false);
   };
 
-  const createProject = () => {
+  const createProject = async () => {
     if (projectName.trim() == '') {
       getErrorMessage('Project name empty', messageApi);
       return;
     }
+
+    await invoke('create_project', { userId: 1, projectName: projectName });
     setIndex(index + 1);
     setItems([...items, {
       label: projectName,
@@ -118,7 +120,7 @@ const Todolist = () => {
                 <h1>13</h1>
                 <h3>SEPTEMBER</h3>
               </div>
-              <Progress type='circle' percent={100} />
+              <Progress type='circle' percent={0} />
             </div>
             <div className={todoStyle.tasks__wrap}>
               <div>
