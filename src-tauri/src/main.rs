@@ -4,6 +4,7 @@
 use anyhow::Result;
 
 mod error;
+mod project;
 mod store;
 mod user;
 
@@ -27,6 +28,8 @@ async fn main() -> Result<()> {
             user::user_service::register_user,
             user::user_service::login_user,
             user::user_service::logout_user,
+            // Project
+            project::project_service::create_project
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
