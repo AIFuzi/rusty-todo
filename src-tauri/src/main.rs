@@ -29,7 +29,8 @@ async fn main() -> Result<()> {
             user::user_service::login_user,
             user::user_service::logout_user,
             // Project
-            project::project_service::create_project
+            project::project_service::create_project,
+            project::project_service::get_project_by_user_id
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
