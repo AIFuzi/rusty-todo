@@ -6,6 +6,7 @@ pub mod project_store {
 
     #[derive(Serialize, Deserialize)]
     pub struct ProjectStruct {
+        id: i32,
         user_id: i32,
         project_name: String,
     }
@@ -29,17 +30,21 @@ pub mod project_store {
     pub async fn get_projects_by_user_id(
         pool: &sqlx::PgPool,
         user_id: i32,
-    ) -> Result<Option<ProjectStruct>, sqlx::Error> {
+    ) -> Result<Vec<ProjectStruct>, sqlx::Error> {
         let query = sqlx::query("SELECT * FROM projects WHERE user_id = $1")
             .bind(user_id)
-            .fetch_optional(pool)
+            .fetch_all(pool)
             .await?;
 
-        let project_res = query.map(|row| ProjectStruct {
-            user_id: row.get("user_id"),
-            project_name: row.get("project_name"),
-        });
+        let projects_res = query
+            .iter()
+            .map(|row| ProjectStruct {
+                id: row.get("id"),
+                user_id: row.get("user_id"),
+                project_name: row.get("project_name"),
+            })
+            .collect();
 
-        Ok(project_res)
+        Ok(projects_res)
     }
 }

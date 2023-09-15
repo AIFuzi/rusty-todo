@@ -22,7 +22,7 @@ pub mod project_service {
     pub async fn get_project_by_user_id(
         state: State<'_, sqlx::PgPool>,
         user_id: i32,
-    ) -> CommandResult<Option<project_store::ProjectStruct>> {
+    ) -> CommandResult<Vec<project_store::ProjectStruct>> {
         let pool = state.inner();
         let projects = project_store::get_projects_by_user_id(pool, user_id).await?;
 

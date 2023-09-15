@@ -8,19 +8,19 @@ import {
   Progress,
   Space,
   Typography,
-} from "antd";
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/context";
-import { invoke } from "@tauri-apps/api";
+} from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../context/context';
+import { invoke } from '@tauri-apps/api';
 import {
   PieChartOutlined,
   PlusOutlined,
   UserOutlined,
-} from "@ant-design/icons";
-import todoStyle from "../styles/todo.module.css";
-import Link from "antd/es/typography/Link";
-import TaskItem from "../components/tasks/TaskItem";
-import { getErrorMessage } from "../messages/message";
+} from '@ant-design/icons';
+import todoStyle from '../styles/todo.module.css';
+import Link from 'antd/es/typography/Link';
+import TaskItem from '../components/tasks/TaskItem';
+import { getErrorMessage } from '../messages/message';
 
 const { Title } = Typography;
 
@@ -29,45 +29,34 @@ const Todolist = () => {
   const [index, setIndex] = useState(1);
   const [items, setItems] = useState([]);
   const [modalProject, setModalProject] = useState(false);
-  const [projectName, setProjectName] = useState("");
+  const [projectName, setProjectName] = useState('');
   const [messageApi, contextHolder] = message.useMessage();
-  const [result, setResult] = useState("");
 
   useEffect(() => {
     getProjects();
-    console.log(result);
   }, []);
 
   const getProjects = async () => {
-    let res = await invoke("get_project_by_user_id", { userId: 1 });
-    console.log(res);
-    setItems([...items, { label: result.project_name }]);
+    setItems(await invoke('get_project_by_user_id', { userId: 1 }));
   };
 
   const logout = async () => {
-    await invoke("logout_user", { token: localStorage.getItem("tok") });
+    await invoke('logout_user', { token: localStorage.getItem('tok') });
     localStorage.clear();
     setIsAuth(false);
   };
 
   const createProject = async () => {
-    if (projectName.trim() == "") {
-      getErrorMessage("Project name empty", messageApi);
+    if (projectName.trim() == '') {
+      getErrorMessage('Project name empty', messageApi);
       return;
     }
 
-    await invoke("create_project", { userId: 1, projectName: projectName });
+    await invoke('create_project', { userId: 1, projectName: projectName });
     setIndex(index + 1);
-    setItems([
-      ...items,
-      {
-        label: projectName,
-        key: index,
-        icon: <PieChartOutlined />,
-      },
-    ]);
+    setItems([...items, { project_name: projectName }]);
 
-    setProjectName("");
+    setProjectName('');
     setModalProject(false);
   };
 
@@ -83,10 +72,10 @@ const Todolist = () => {
     <div>
       {contextHolder}
       <Modal open={modalProject} onOk={createProject} onCancel={handleCancel}>
-        <Space direction="vertical" size="large" style={{ display: "flex" }}>
+        <Space direction='vertical' size='large' style={{ display: 'flex' }}>
           <Title level={3}>Create project</Title>
           <Input
-            placeholder="Project name"
+            placeholder='Project name'
             onChange={(e) => setProjectName(e.target.value)}
             value={projectName}
           />
@@ -105,19 +94,22 @@ const Todolist = () => {
             <div className={todoStyle.todo__projects}>
               <div className={todoStyle.todo__projects__title}>
                 <Title level={3}>Projects</Title>
-                <Button type="text" onClick={openProjectModal}>
-                  <PlusOutlined style={{ color: "#fff" }} />
+                <Button type='text' onClick={openProjectModal}>
+                  <PlusOutlined style={{ color: '#fff' }} />
                 </Button>
               </div>
-              {items.length > 0 ? (
-                <Menu
-                  defaultSelectedKeys={["1"]}
-                  style={{ background: "#1a1a1a", border: "none" }}
-                  items={items}
-                />
-              ) : (
-                <Title level={4}>No created projects</Title>
-              )}
+              <div className={todoStyle.projects__list}>
+                {items.length > 0
+                  ? items.map((project) => (
+                    <Button
+                      key={project.id}
+                      type='link'
+                    >
+                      {project.project_name}
+                    </Button>
+                  ))
+                  : <Title level={5}>No projects found</Title>}
+              </div>
             </div>
           </div>
         </div>
@@ -133,7 +125,7 @@ const Todolist = () => {
                 <h1>13</h1>
                 <h3>SEPTEMBER</h3>
               </div>
-              <Progress type="circle" percent={0} />
+              <Progress type='circle' percent={0} />
             </div>
             <div className={todoStyle.tasks__wrap}>
               <div>
@@ -147,7 +139,7 @@ const Todolist = () => {
               </div>
             </div>
             <div className={todoStyle.task__addinput}>
-              <Input size="large" placeholder="Add task" />
+              <Input size='large' placeholder='Add task' />
             </div>
           </div>
         </div>

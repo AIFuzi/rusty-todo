@@ -148,3 +148,9 @@
 {
   margin-top: 35px;
 }
+
+.projects__list
+{
+  display: flex;
+  flex-direction: column;
+}
