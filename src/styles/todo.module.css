@@ -153,4 +153,32 @@
 {
   display: flex;
   flex-direction: column;
+  font-family: 'Roboto', sans-serif;
+  color: #cecece;
+}
+
+.project__name
+{
+  transition: linear 0.2s;
+  padding: 10px 0px;
+  cursor: pointer;
+}
+
+.project__name:hover
+{
+  color: #6abe39;
+}
+
+.project__name__selected
+{
+  color: #6abe39;
+}
+
+.project__item
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 5px;
 }

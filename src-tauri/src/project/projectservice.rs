@@ -28,4 +28,15 @@ pub mod project_service {
 
         Ok(projects)
     }
+
+    #[tauri::command]
+    pub async fn delete_project(
+        state: State<'_, sqlx::PgPool>,
+        project_id: i32,
+    ) -> CommandResult<()> {
+        let pool = state.inner();
+        project_store::delete_project(pool, project_id);
+
+        Ok(())
+    }
 }

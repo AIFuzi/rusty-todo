@@ -47,4 +47,13 @@ pub mod project_store {
 
         Ok(projects_res)
     }
+
+    pub async fn delete_project(pool: &sqlx::PgPool, project_id: i32) -> Result<(), sqlx::Error> {
+        let query = sqlx::query("DELETE FROM projects WHERE id = $1")
+            .bind(project_id)
+            .execute(pool)
+            .await?;
+
+        Ok(())
+    }
 }

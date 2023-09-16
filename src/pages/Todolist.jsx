@@ -2,7 +2,6 @@ import {
   Avatar,
   Button,
   Input,
-  Menu,
   message,
   Modal,
   Progress,
@@ -21,6 +20,7 @@ import todoStyle from '../styles/todo.module.css';
 import Link from 'antd/es/typography/Link';
 import TaskItem from '../components/tasks/TaskItem';
 import { getErrorMessage } from '../messages/message';
+import ProjectItem from '../components/tasks/ProjectItem';
 
 const { Title } = Typography;
 
@@ -31,6 +31,15 @@ const Todolist = () => {
   const [modalProject, setModalProject] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [messageApi, contextHolder] = message.useMessage();
+  const [projectTitle, setProjectTitle] = useState('');
+  const [task, setTask] = useState([
+    { id: 1, user_id: 1, project_id: 1, task_label: 'Task 1', status: true },
+    { id: 2, user_id: 1, project_id: 1, task_label: 'Task 2', status: true },
+    { id: 3, user_id: 1, project_id: 1, task_label: 'Task 3', status: false },
+    { id: 4, user_id: 1, project_id: 1, task_label: 'Task 4', status: true },
+    { id: 5, user_id: 1, project_id: 1, task_label: 'Task 5', status: false },
+    { id: 6, user_id: 1, project_id: 1, task_label: 'Task 6', status: false },
+  ]);
 
   useEffect(() => {
     getProjects();
@@ -38,6 +47,10 @@ const Todolist = () => {
 
   const getProjects = async () => {
     setItems(await invoke('get_project_by_user_id', { userId: 1 }));
+  };
+
+  const getProjectTitle = (newTitle) => {
+    setProjectTitle(newTitle);
   };
 
   const logout = async () => {
@@ -101,12 +114,12 @@ const Todolist = () => {
               <div className={todoStyle.projects__list}>
                 {items.length > 0
                   ? items.map((project) => (
-                    <Button
+                    <ProjectItem
                       key={project.id}
-                      type='link'
-                    >
-                      {project.project_name}
-                    </Button>
+                      id={project.id}
+                      name={project.project_name}
+                      getProject={getProjectTitle}
+                    />
                   ))
                   : <Title level={5}>No projects found</Title>}
               </div>
@@ -116,7 +129,7 @@ const Todolist = () => {
         <div className={todoStyle.todo__center__pannel}>
           <div className={todoStyle.todo__center__wrap}>
             <div className={todoStyle.todo__center__title}>
-              <h1>Project 1</h1>
+              <h1>{projectTitle}</h1>
               <h2 className={todoStyle.title__job}>good job, user</h2>
             </div>
             <div className={todoStyle.stats__wrap}>
@@ -133,8 +146,14 @@ const Todolist = () => {
               </div>
               <div className={todoStyle.task__scroll}>
                 <div className={todoStyle.tasks__completed}>
-                  <TaskItem />
-                  <TaskItem />
+                  {task.map((taks) => (
+                    <TaskItem
+                      key={taks.id}
+                      id={taks.id}
+                      label={taks.task_label}
+                      status={taks.status}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
