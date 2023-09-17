@@ -11,11 +11,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/context';
 import { invoke } from '@tauri-apps/api';
-import {
-  PieChartOutlined,
-  PlusOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import todoStyle from '../styles/todo.module.css';
 import Link from 'antd/es/typography/Link';
 import TaskItem from '../components/tasks/TaskItem';
