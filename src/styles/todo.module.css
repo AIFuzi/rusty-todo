@@ -11,6 +11,7 @@
 
 ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
 .todo__wrapper
@@ -28,6 +29,7 @@
   flex-direction: column;
   width: 30vw;
   height: 100vh;
+  border-right: 2px solid #1e1e1e;
 }
 
 .todo__center__pannel
@@ -181,4 +183,10 @@
   align-items: center;
   justify-content: space-between;
   margin: 0 5px;
+}
+
+.empty__center
+{
+  display: flex;
+  align-items: center;
 }
