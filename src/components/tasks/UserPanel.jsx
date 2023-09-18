@@ -7,7 +7,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { invoke } from '@tauri-apps/api';
 import { AuthContext } from '../../context/context';
 
-const UserPanel = () => {
+const UserPanel = ({ name }) => {
   const { setIsAuth } = useContext(AuthContext);
 
   const logout = async () => {
@@ -20,7 +20,7 @@ const UserPanel = () => {
     <div className={todoStyle.todo__user__pannel}>
       <Avatar size={46} icon={<UserOutlined />} />
       <div>
-        <Title level={5}>User name</Title>
+        <Title level={5}>{name}</Title>
         <Link onClick={logout}>Logout</Link>
       </div>
     </div>

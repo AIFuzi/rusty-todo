@@ -5,7 +5,7 @@ import ProjectTitle from './ProjectTitle';
 import { Input, Progress } from 'antd';
 import TaskItem from './TaskItem';
 
-const TaksPanel = ({ projectTitle }) => {
+const TaksPanel = ({ projectTitle, username }) => {
   const [task, setTask] = useState([
     { id: 1, user_id: 1, project_id: 1, task_label: 'Task 1', status: true },
     { id: 2, user_id: 1, project_id: 1, task_label: 'Task 2', status: true },
@@ -14,7 +14,7 @@ const TaksPanel = ({ projectTitle }) => {
   return (
     <div className={todoStyle.todo__center__pannel}>
       <div className={todoStyle.todo__center__wrap}>
-        <ProjectTitle projectTitle={projectTitle} />
+        <ProjectTitle username={username} projectTitle={projectTitle} />
         <div className={todoStyle.stats__wrap}>
           <div className={todoStyle.stats__day}>
             <h2>WED</h2>
