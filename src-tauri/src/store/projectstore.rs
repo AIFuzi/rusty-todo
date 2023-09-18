@@ -7,19 +7,19 @@ pub mod project_store {
     #[derive(Serialize, Deserialize)]
     pub struct ProjectStruct {
         id: i32,
-        user_id: i32,
+        user_login: String,
         project_name: String,
     }
 
     pub async fn create_project(
         pool: &sqlx::PgPool,
-        user_id: i32,
+        user_login: String,
         project_name: String,
     ) -> Result<(), sqlx::Error> {
-        let query = "INSERT INTO projects (user_id, project_name) VALUES ($1, $2)";
+        let query = "INSERT INTO projects (user_login, project_name) VALUES ($1, $2)";
 
         sqlx::query(query)
-            .bind(user_id)
+            .bind(user_login)
             .bind(project_name)
             .execute(pool)
             .await?;
@@ -27,12 +27,12 @@ pub mod project_store {
         Ok(())
     }
 
-    pub async fn get_projects_by_user_id(
+    pub async fn get_projects_by_user_login(
         pool: &sqlx::PgPool,
-        user_id: i32,
+        user_login: String,
     ) -> Result<Vec<ProjectStruct>, sqlx::Error> {
-        let query = sqlx::query("SELECT * FROM projects WHERE user_id = $1")
-            .bind(user_id)
+        let query = sqlx::query("SELECT * FROM projects WHERE user_login = $1")
+            .bind(user_login)
             .fetch_all(pool)
             .await?;
 
@@ -40,7 +40,7 @@ pub mod project_store {
             .iter()
             .map(|row| ProjectStruct {
                 id: row.get("id"),
-                user_id: row.get("user_id"),
+                user_login: row.get("user_login"),
                 project_name: row.get("project_name"),
             })
             .collect();

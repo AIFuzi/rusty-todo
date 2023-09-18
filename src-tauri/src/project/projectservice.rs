@@ -9,22 +9,22 @@ pub mod project_service {
     #[tauri::command]
     pub async fn create_project(
         state: State<'_, sqlx::PgPool>,
-        user_id: i32,
+        user_login: String,
         project_name: String,
     ) -> CommandResult<()> {
         let pool = state.inner();
-        project_store::create_project(&pool, user_id, project_name).await?;
+        project_store::create_project(&pool, user_login, project_name).await?;
 
         Ok(())
     }
 
     #[tauri::command]
-    pub async fn get_project_by_user_id(
+    pub async fn get_projects_by_user_login(
         state: State<'_, sqlx::PgPool>,
-        user_id: i32,
+        user_login: String,
     ) -> CommandResult<Vec<project_store::ProjectStruct>> {
         let pool = state.inner();
-        let projects = project_store::get_projects_by_user_id(pool, user_id).await?;
+        let projects = project_store::get_projects_by_user_login(pool, user_login).await?;
 
         Ok(projects)
     }

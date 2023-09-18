@@ -6,6 +6,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import todoStyle from '../../styles/todo.module.css';
 import { invoke } from '@tauri-apps/api';
 import { getErrorMessage } from '../../messages/message';
+import jwtDecode from 'jwt-decode';
 
 const ProjectsScroll = ({ projectTitle }) => {
   const [projects, setProjects] = useState([]);
@@ -23,7 +24,10 @@ const ProjectsScroll = ({ projectTitle }) => {
       return;
     }
 
-    await invoke('create_project', { userId: 1, projectName: projectName });
+    await invoke('create_project', {
+      userLogin: jwtDecode(localStorage.getItem('tok')).user_login,
+      projectName: projectName,
+    });
     setProjects([...projects, { project_name: projectName }]);
 
     setProjectName('');
@@ -36,7 +40,11 @@ const ProjectsScroll = ({ projectTitle }) => {
   };
 
   const getProjects = async () => {
-    setProjects(await invoke('get_project_by_user_id', { userId: 1 }));
+    setProjects(
+      await invoke('get_projects_by_user_login', {
+        userLogin: jwtDecode(localStorage.getItem('tok')).user_login,
+      }),
+    );
   };
 
   const openProjectModal = () => {

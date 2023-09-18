@@ -33,7 +33,7 @@ pub mod main_store {
 
         sqlx::query(
             r#"CREATE TABLE IF NOT EXISTS projects (id serial,
-            user_id serial,
+            user_login text,
             project_name text);"#,
         )
         .execute(&pool)
