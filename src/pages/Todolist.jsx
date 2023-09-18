@@ -22,7 +22,6 @@ const { Title } = Typography;
 
 const Todolist = () => {
   const { setIsAuth } = useContext(AuthContext);
-  const [index, setIndex] = useState(1);
   const [items, setItems] = useState([]);
   const [modalProject, setModalProject] = useState(false);
   const [projectName, setProjectName] = useState('');
@@ -31,10 +30,6 @@ const Todolist = () => {
   const [task, setTask] = useState([
     { id: 1, user_id: 1, project_id: 1, task_label: 'Task 1', status: true },
     { id: 2, user_id: 1, project_id: 1, task_label: 'Task 2', status: true },
-    { id: 3, user_id: 1, project_id: 1, task_label: 'Task 3', status: false },
-    { id: 4, user_id: 1, project_id: 1, task_label: 'Task 4', status: true },
-    { id: 5, user_id: 1, project_id: 1, task_label: 'Task 5', status: false },
-    { id: 6, user_id: 1, project_id: 1, task_label: 'Task 6', status: false },
   ]);
 
   useEffect(() => {
@@ -62,11 +57,15 @@ const Todolist = () => {
     }
 
     await invoke('create_project', { userId: 1, projectName: projectName });
-    setIndex(index + 1);
     setItems([...items, { project_name: projectName }]);
 
     setProjectName('');
     setModalProject(false);
+  };
+
+  const deleteProject = async (id) => {
+    await invoke('delete_project', { projectId: id });
+    setItems(items.filter((p) => p.id !== id));
   };
 
   const openProjectModal = () => {
@@ -115,6 +114,7 @@ const Todolist = () => {
                       id={project.id}
                       name={project.project_name}
                       getProject={getProjectTitle}
+                      deleteProject={deleteProject}
                     />
                   ))
                   : <Title level={5}>No projects found</Title>}

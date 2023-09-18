@@ -35,7 +35,7 @@ pub mod project_service {
         project_id: i32,
     ) -> CommandResult<()> {
         let pool = state.inner();
-        project_store::delete_project(pool, project_id);
+        project_store::delete_project(pool, project_id).await?;
 
         Ok(())
     }
