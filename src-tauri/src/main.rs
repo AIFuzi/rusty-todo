@@ -6,6 +6,7 @@ use anyhow::Result;
 mod error;
 mod project;
 mod store;
+mod tasks;
 mod user;
 
 #[tokio::main]
@@ -31,7 +32,9 @@ async fn main() -> Result<()> {
             // Project
             project::project_service::create_project,
             project::project_service::delete_project,
-            project::project_service::get_projects_by_user_login
+            project::project_service::get_projects_by_user_login,
+            // Tasks
+            tasks::task_service::create_task
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
