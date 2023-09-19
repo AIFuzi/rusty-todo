@@ -3,9 +3,10 @@ import React from 'react';
 import todoStyle from '../../styles/todo.module.css';
 import { CloseOutlined } from '@ant-design/icons';
 
-const ProjectItem = ({ id, name, getProject, deleteProject }) => {
+const ProjectItem = ({ id, getProjId, name, getProject, deleteProject }) => {
   const getId = () => {
     getProject(`${name}`);
+    getProjId(id);
   };
 
   return (

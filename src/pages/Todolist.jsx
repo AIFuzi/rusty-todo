@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import todoStyle from '../styles/todo.module.css';
 import UserPanel from '../components/tasks/UserPanel';
 import ProjectsScroll from '../components/tasks/ProjectsScroll';
-import TaksPanel from '../components/tasks/TaksPanel';
+import TasksPanel from '../components/tasks/TasksPanel';
 import jwtDecode from 'jwt-decode';
 
 const Todolist = () => {
   const [projectTitle, setProjectTitle] = useState('');
   const [name, setName] = useState('');
+  const [projId, setProjId] = useState(0);
 
   const getProjectTitle = (newTitle) => {
     setProjectTitle(newTitle);
@@ -23,10 +24,19 @@ const Todolist = () => {
       <div className={todoStyle.todo__wrapper}>
         <div className={todoStyle.todo__left__pannel}>
           <UserPanel name={name} />
-          <ProjectsScroll projectTitle={getProjectTitle} />
+          <ProjectsScroll
+            projectId={setProjId}
+            projectTitle={getProjectTitle}
+          />
         </div>
         {projectTitle.trim() !== ''
-          ? <TaksPanel projectTitle={projectTitle} username={name} />
+          ? (
+            <TasksPanel
+              projectTitle={projectTitle}
+              username={name}
+              projectId={projId}
+            />
+          )
           : (
             <div className={todoStyle.empty__center}>
               <Empty
@@ -35,7 +45,6 @@ const Todolist = () => {
               />
             </div>
           )}
-
         <div className={todoStyle.todo__right__pannel}></div>
       </div>
     </div>

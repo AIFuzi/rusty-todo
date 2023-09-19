@@ -8,7 +8,7 @@ import { invoke } from '@tauri-apps/api';
 import { getErrorMessage } from '../../messages/message';
 import jwtDecode from 'jwt-decode';
 
-const ProjectsScroll = ({ projectTitle }) => {
+const ProjectsScroll = ({ projectId, projectTitle }) => {
   const [projects, setProjects] = useState([]);
   const [projectName, setProjectName] = useState('');
   const [modalProject, setModalProject] = useState(false);
@@ -84,6 +84,7 @@ const ProjectsScroll = ({ projectTitle }) => {
               <ProjectItem
                 key={project.id}
                 id={project.id}
+                getProjId={projectId}
                 name={project.project_name}
                 getProject={projectTitle}
                 deleteProject={deleteProject}

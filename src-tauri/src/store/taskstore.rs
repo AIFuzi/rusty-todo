@@ -20,7 +20,7 @@ pub mod task_store {
         priority: i32,
     ) -> Result<(), sqlx::Error> {
         sqlx::query(
-            "INSERT INTO tasks (project_id, task_name, priority, status) VALUES $1, $2, $3, false ",
+            "INSERT INTO tasks (project_id, task_name, priority, status) VALUES ($1, $2, $3, false); ",
         )
         .bind(project_id)
         .bind(task_name)

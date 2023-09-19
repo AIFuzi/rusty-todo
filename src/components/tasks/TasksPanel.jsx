@@ -6,8 +6,8 @@ import { Empty, Input, Progress } from 'antd';
 import TaskItem from './TaskItem';
 import AddTask from './AddTask';
 
-const TaksPanel = ({ projectTitle, username }) => {
-  const [task, setTask] = useState([]);
+const TasksPanel = ({ projectId, projectTitle, username }) => {
+  const [tasks, setTasks] = useState([]);
 
   return (
     <div className={todoStyle.todo__center__pannel}>
@@ -27,25 +27,25 @@ const TaksPanel = ({ projectTitle, username }) => {
           </div>
           <div className={todoStyle.task__scroll}>
             <div className={todoStyle.tasks__completed}>
-              {task.length <= 0
+              {tasks.length <= 0
                 ? <Empty description='Create first task' />
-                : task.map((taks) => (
+                : tasks.map((task) => (
                   <TaskItem
-                    key={taks.id}
-                    id={taks.id}
-                    label={taks.task_label}
-                    status={taks.status}
+                    key={task.id}
+                    id={task.id}
+                    label={task.task_label}
+                    status={task.status}
                   />
                 ))}
             </div>
           </div>
         </div>
         <div className={todoStyle.task__addinput}>
-          <AddTask />
+          <AddTask projectId={projectId} newTask={setTasks} tasks={tasks} />
         </div>
       </div>
     </div>
   );
 };
 
-export default TaksPanel;
+export default TasksPanel;
