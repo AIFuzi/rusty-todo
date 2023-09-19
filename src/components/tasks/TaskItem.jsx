@@ -2,7 +2,7 @@ import React from 'react';
 import todoStyle from '../../styles/todo.module.css';
 import { Checkbox } from 'antd';
 
-const TaskItem = ({ label, status }) => {
+const TaskItem = ({ id, label, status }) => {
   return (
     <div className={todoStyle.task}>
       <div className={todoStyle.task__content__wrap}>
@@ -12,6 +12,7 @@ const TaskItem = ({ label, status }) => {
             Low priority
           </span>
           <h3>{label}</h3>
+          <h4>{id}</h4>
         </div>
       </div>
     </div>

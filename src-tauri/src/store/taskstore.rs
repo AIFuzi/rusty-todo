@@ -30,4 +30,27 @@ pub mod task_store {
 
         Ok(())
     }
+
+    pub async fn get_tasks_by_project_id(
+        pool: &sqlx::PgPool,
+        project_id: i32,
+    ) -> Result<Vec<TaskStruct>, sqlx::Error> {
+        let query = sqlx::query("SELECT * FROM tasks WHERE project_id = $1")
+            .bind(project_id)
+            .fetch_all(pool)
+            .await?;
+
+        let tasks_res = query
+            .iter()
+            .map(|row| TaskStruct {
+                id: row.get("id"),
+                project_id: row.get("project_id"),
+                task_name: row.get("task_name"),
+                priority: row.get("priority"),
+                status: row.get("status"),
+            })
+            .collect();
+
+        Ok(tasks_res)
+    }
 }

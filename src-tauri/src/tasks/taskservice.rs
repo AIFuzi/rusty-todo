@@ -18,4 +18,15 @@ pub mod task_service {
 
         Ok(())
     }
+
+    #[tauri::command]
+    pub async fn get_tasks_by_proj_id(
+        state: State<'_, sqlx::PgPool>,
+        project_id: i32,
+    ) -> CommandResult<Vec<task_store::TaskStruct>> {
+        let pool = state.inner();
+        let tasks = task_store::get_tasks_by_project_id(pool, project_id).await?;
+
+        Ok(tasks)
+    }
 }

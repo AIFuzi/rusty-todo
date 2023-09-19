@@ -11,7 +11,9 @@ const AddTask = ({ projectId, tasks, newTask }) => {
   const [taskName, setTaskName] = useState('');
   const [messageApi, contextHolder] = message.useMessage();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    loadTasks();
+  }, [projectId]);
 
   const openTaskModal = () => {
     setTaskModal(true);
@@ -33,11 +35,16 @@ const AddTask = ({ projectId, tasks, newTask }) => {
       priority: priority,
     });
 
-    newTask([...tasks, { task_label: taskName }]);
+    newTask([...tasks, { task_name: taskName }]);
 
     setPriority(1);
     setTaskName('');
     setTaskModal(false);
+  };
+
+  const loadTasks = async () => {
+    newTask(await invoke('get_tasks_by_proj_id', { projectId: projectId }));
+    console.log(await invoke('get_tasks_by_proj_id', { projectId: projectId }));
   };
 
   return (
