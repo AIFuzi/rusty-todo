@@ -33,6 +33,7 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
                   <TaskItem
                     key={task.id}
                     id={task.id}
+                    priority={task.priority}
                     label={task.task_name}
                     status={task.status}
                   />

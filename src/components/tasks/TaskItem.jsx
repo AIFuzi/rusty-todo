@@ -2,17 +2,27 @@ import React from 'react';
 import todoStyle from '../../styles/todo.module.css';
 import { Checkbox } from 'antd';
 
-const TaskItem = ({ id, label, status }) => {
+const TaskItem = ({ label, priority, status }) => {
+  const getPriorityColor = () => {
+    switch (priority) {
+      case 'Low':
+        return '#73d13d';
+      case 'Medium':
+        return '#e8b339';
+      case 'High':
+        return '#d32029';
+    }
+  };
+
   return (
     <div className={todoStyle.task}>
       <div className={todoStyle.task__content__wrap}>
         <Checkbox checked={status} />
         <div className={todoStyle.task__content}>
-          <span className={todoStyle.task__low__priority}>
-            Low priority
+          <span style={{ color: getPriorityColor() }}>
+            {priority} priority
           </span>
           <h3>{label}</h3>
-          <h4>{id}</h4>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import { invoke } from '@tauri-apps/api';
 
 const AddTask = ({ projectId, tasks, newTask }) => {
   const [taskModal, setTaskModal] = useState(false);
-  const [priority, setPriority] = useState(1);
+  const [priority, setPriority] = useState('Low');
   const [taskName, setTaskName] = useState('');
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -35,16 +35,15 @@ const AddTask = ({ projectId, tasks, newTask }) => {
       priority: priority,
     });
 
-    newTask([...tasks, { task_name: taskName }]);
+    newTask([...tasks, { task_name: taskName, priority: priority }]);
 
-    setPriority(1);
+    setPriority('Low');
     setTaskName('');
     setTaskModal(false);
   };
 
   const loadTasks = async () => {
     newTask(await invoke('get_tasks_by_proj_id', { projectId: projectId }));
-    console.log(await invoke('get_tasks_by_proj_id', { projectId: projectId }));
   };
 
   return (
@@ -68,9 +67,9 @@ const AddTask = ({ projectId, tasks, newTask }) => {
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
           >
-            <Radio.Button value={1}>Low priority</Radio.Button>
-            <Radio.Button value={2}>Medium priority</Radio.Button>
-            <Radio.Button value={3}>High priority</Radio.Button>
+            <Radio.Button value='Low'>Low priority</Radio.Button>
+            <Radio.Button value='Medium'>Medium priority</Radio.Button>
+            <Radio.Button value='High'>High priority</Radio.Button>
           </Radio.Group>
         </Space>
       </Modal>

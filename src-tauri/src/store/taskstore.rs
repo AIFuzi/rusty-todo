@@ -9,7 +9,7 @@ pub mod task_store {
         id: i32,
         project_id: i32,
         task_name: String,
-        priority: i32,
+        priority: String,
         status: bool,
     }
 
@@ -17,7 +17,7 @@ pub mod task_store {
         pool: &sqlx::PgPool,
         project_id: i32,
         task_name: String,
-        priority: i32,
+        priority: String,
     ) -> Result<(), sqlx::Error> {
         sqlx::query(
             "INSERT INTO tasks (project_id, task_name, priority, status) VALUES ($1, $2, $3, false); ",

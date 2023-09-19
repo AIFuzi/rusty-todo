@@ -146,6 +146,16 @@
   color: #73d13d;
 }
 
+.task__medium__priority
+{
+  color: #e8b339;
+}
+
+.task__high__priority
+{
+  color: #d32029;
+}
+
 .task__addinput
 {
   margin-top: 35px;

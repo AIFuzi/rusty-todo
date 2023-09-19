@@ -43,7 +43,7 @@ pub mod main_store {
             r#"CREATE TABLE IF NOT EXISTS tasks (id serial,
             project_id serial,
             task_name text,
-            priority serial,
+            priority text,
             status boolean);"#,
         )
         .execute(&pool)

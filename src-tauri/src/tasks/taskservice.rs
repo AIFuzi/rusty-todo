@@ -10,7 +10,7 @@ pub mod task_service {
         state: State<'_, sqlx::PgPool>,
         project_id: i32,
         task_name: String,
-        priority: i32,
+        priority: String,
     ) -> CommandResult<()> {
         let pool = state.inner();
 
