@@ -41,11 +41,10 @@ pub mod main_store {
 
         sqlx::query(
             r#"CREATE TABLE IF NOT EXISTS tasks (id serial,
-            user_id serial,
             project_id serial,
-            project_name text,
+            task_name text,
             priority serial,
-            completed boolean);"#,
+            status boolean);"#,
         )
         .execute(&pool)
         .await?;
