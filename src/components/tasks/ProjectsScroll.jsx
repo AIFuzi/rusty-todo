@@ -37,6 +37,7 @@ const ProjectsScroll = ({ projectTitle }) => {
   const deleteProject = async (id) => {
     await invoke('delete_project', { projectId: id });
     setProjects(projects.filter((p) => p.id !== id));
+    projectTitle = '';
   };
 
   const getProjects = async () => {

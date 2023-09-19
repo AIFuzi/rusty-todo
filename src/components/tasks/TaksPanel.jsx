@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import todoStyle from '../../styles/todo.module.css';
 import Title from 'antd/es/typography/Title';
 import ProjectTitle from './ProjectTitle';
-import { Input, Progress } from 'antd';
+import { Empty, Input, Progress } from 'antd';
 import TaskItem from './TaskItem';
+import AddTask from './AddTask';
 
 const TaksPanel = ({ projectTitle, username }) => {
-  const [task, setTask] = useState([
-    { id: 1, user_id: 1, project_id: 1, task_label: 'Task 1', status: true },
-    { id: 2, user_id: 1, project_id: 1, task_label: 'Task 2', status: true },
-  ]);
+  const [task, setTask] = useState([]);
 
   return (
     <div className={todoStyle.todo__center__pannel}>
@@ -29,23 +27,22 @@ const TaksPanel = ({ projectTitle, username }) => {
           </div>
           <div className={todoStyle.task__scroll}>
             <div className={todoStyle.tasks__completed}>
-              {task.map((taks) => (
-                <TaskItem
-                  key={taks.id}
-                  id={taks.id}
-                  label={taks.task_label}
-                  status={taks.status}
-                />
-              ))}
+              {task.length <= 0
+                ? <Empty description='Create first task' />
+                : task.map((taks) => (
+                  <TaskItem
+                    key={taks.id}
+                    id={taks.id}
+                    label={taks.task_label}
+                    status={taks.status}
+                  />
+                ))}
             </div>
           </div>
         </div>
         <div className={todoStyle.task__addinput}>
-          <Input size='large' placeholder='Add task' />
+          <AddTask />
         </div>
-      </div>
-
-      <div>
       </div>
     </div>
   );
