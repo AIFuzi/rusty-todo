@@ -53,4 +53,18 @@ pub mod task_store {
 
         Ok(tasks_res)
     }
+
+    pub async fn update_task_status(
+        pool: &sqlx::PgPool,
+        task_id: i32,
+        new_status: bool,
+    ) -> Result<(), sqlx::Error> {
+        sqlx::query("UPDATE tasks SET status = $1 WHERE id = $2")
+            .bind(new_status)
+            .bind(task_id)
+            .execute(pool)
+            .await?;
+
+        Ok(())
+    }
 }

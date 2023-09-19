@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import todoStyle from '../../styles/todo.module.css';
 import { Checkbox } from 'antd';
+import { invoke } from '@tauri-apps/api';
 
-const TaskItem = ({ label, priority, status }) => {
+const TaskItem = ({ id, label, priority, loadStatus }) => {
+  const [status, setStatus] = useState(loadStatus);
+
   const getPriorityColor = () => {
     switch (priority) {
       case 'Low':
@@ -14,10 +17,18 @@ const TaskItem = ({ label, priority, status }) => {
     }
   };
 
+  const setTaskStatus = async (e) => {
+    setStatus(e.target.checked);
+    await invoke('update_task_status', { taskId: id, newStatus: !status });
+  };
+
   return (
     <div className={todoStyle.task}>
       <div className={todoStyle.task__content__wrap}>
-        <Checkbox checked={status} />
+        <Checkbox
+          checked={status}
+          onChange={setTaskStatus}
+        />
         <div className={todoStyle.task__content}>
           <span style={{ color: getPriorityColor() }}>
             {priority} priority

@@ -35,7 +35,7 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
                     id={task.id}
                     priority={task.priority}
                     label={task.task_name}
-                    status={task.status}
+                    loadStatus={task.status}
                   />
                 ))}
             </div>

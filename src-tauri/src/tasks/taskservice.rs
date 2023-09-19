@@ -29,4 +29,16 @@ pub mod task_service {
 
         Ok(tasks)
     }
+
+    #[tauri::command]
+    pub async fn update_task_status(
+        state: State<'_, sqlx::PgPool>,
+        task_id: i32,
+        new_status: bool,
+    ) -> CommandResult<()> {
+        let pool = state.inner();
+        task_store::update_task_status(pool, task_id, new_status).await?;
+
+        Ok(())
+    }
 }
