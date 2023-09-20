@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import todoStyle from '../../styles/todo.module.css';
-import { Checkbox } from 'antd';
+import { Button, Checkbox } from 'antd';
 import { invoke } from '@tauri-apps/api';
+import { DeleteOutlined } from '@ant-design/icons';
 
-const TaskItem = ({ id, label, priority, loadStatus }) => {
+const TaskItem = ({ id, label, priority, loadStatus, deleteTask }) => {
   const [status, setStatus] = useState(loadStatus);
 
   const getPriorityColor = () => {
@@ -35,6 +36,13 @@ const TaskItem = ({ id, label, priority, loadStatus }) => {
           </span>
           <h3>{label}</h3>
         </div>
+        <Button
+          type='text'
+          style={{ marginLeft: 'auto' }}
+          onClick={() => deleteTask(id)}
+        >
+          <DeleteOutlined />
+        </Button>
       </div>
     </div>
   );

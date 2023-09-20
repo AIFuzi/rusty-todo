@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import todoStyle from '../../styles/todo.module.css';
 import Title from 'antd/es/typography/Title';
 import ProjectTitle from './ProjectTitle';
-import { Empty, Input, Progress } from 'antd';
+import { Empty, Progress } from 'antd';
 import TaskItem from './TaskItem';
 import AddTask from './AddTask';
+import { invoke } from '@tauri-apps/api';
 
 const TasksPanel = ({ projectId, projectTitle, username }) => {
   const [tasks, setTasks] = useState([]);
+  const [percent, setPercent] = useState(0);
+
+  useEffect(() => {
+    setPercent(
+      Math.round(
+        (tasks.filter((p) => p.status == true).length / tasks.length) * 100,
+      ),
+    );
+  }, []);
+
+  const deleteTask = async (id) => {
+    await invoke('delete_task_by_id', { taskId: id });
+    setTasks(tasks.filter((p) => p.id !== id));
+  };
 
   return (
     <div className={todoStyle.todo__center__pannel}>
@@ -19,7 +34,10 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
             <h1>13</h1>
             <h3>SEPTEMBER</h3>
           </div>
-          <Progress type='circle' percent={0} />
+          <Progress
+            type='circle'
+            percent={percent}
+          />
         </div>
         <div className={todoStyle.tasks__wrap}>
           <div>
@@ -36,6 +54,7 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
                     priority={task.priority}
                     label={task.task_name}
                     loadStatus={task.status}
+                    deleteTask={deleteTask}
                   />
                 ))}
             </div>
