@@ -6,6 +6,7 @@ import { Empty, Progress } from 'antd';
 import TaskItem from './TaskItem';
 import AddTask from './AddTask';
 import { invoke } from '@tauri-apps/api';
+import SortSelect from './SortSelect';
 
 const TasksPanel = ({ projectId, projectTitle, username }) => {
   const [tasks, setTasks] = useState([]);
@@ -40,8 +41,9 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
           />
         </div>
         <div className={todoStyle.tasks__wrap}>
-          <div>
+          <div className={todoStyle.tasks__title}>
             <Title level={3}>Tasks:</Title>
+            <SortSelect />
           </div>
           <div className={todoStyle.task__scroll}>
             <div className={todoStyle.tasks__completed}>

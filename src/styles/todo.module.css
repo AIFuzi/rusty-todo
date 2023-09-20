@@ -201,3 +201,9 @@
   align-items: center;
 }
 
+.project__badge__title
+{
+  display: flex;
+  flex-direction: row;
+}
+
