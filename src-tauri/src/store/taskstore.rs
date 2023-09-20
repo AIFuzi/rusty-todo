@@ -67,4 +67,13 @@ pub mod task_store {
 
         Ok(())
     }
+
+    pub async fn delete_task_by_id(pool: &sqlx::PgPool, task_id: i32) -> Result<(), sqlx::Error> {
+        sqlx::query("DELETE FROM tasks WHERE id = $1")
+            .bind(task_id)
+            .execute(pool)
+            .await?;
+
+        Ok(())
+    }
 }

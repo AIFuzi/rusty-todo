@@ -36,7 +36,8 @@ async fn main() -> Result<()> {
             // Tasks
             tasks::task_service::create_task,
             tasks::task_service::get_tasks_by_proj_id,
-            tasks::task_service::update_task_status
+            tasks::task_service::update_task_status,
+            tasks::task_service::delete_task_by_id
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

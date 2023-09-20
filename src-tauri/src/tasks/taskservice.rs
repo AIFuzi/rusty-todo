@@ -41,4 +41,15 @@ pub mod task_service {
 
         Ok(())
     }
+
+    #[tauri::command]
+    pub async fn delete_task_by_id(
+        state: State<'_, sqlx::PgPool>,
+        task_id: i32,
+    ) -> CommandResult<()> {
+        let pool = state.inner();
+        task_store::delete_task_by_id(pool, task_id).await?;
+
+        Ok(())
+    }
 }
