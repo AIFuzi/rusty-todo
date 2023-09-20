@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import todoStyle from '../../styles/todo.module.css';
-import { Button, Checkbox } from 'antd';
+import { Button, Checkbox, Popconfirm } from 'antd';
 import { invoke } from '@tauri-apps/api';
 import { DeleteOutlined } from '@ant-design/icons';
 
@@ -36,13 +36,21 @@ const TaskItem = ({ id, label, priority, loadStatus, deleteTask }) => {
           </span>
           <h3>{label}</h3>
         </div>
-        <Button
-          type='text'
-          style={{ marginLeft: 'auto' }}
-          onClick={() => deleteTask(id)}
+        <Popconfirm
+          placement='topRight'
+          title='Are you sure to delete this task?'
+          okText='Delete'
+          cancelText='No'
+          onConfirm={() => deleteTask(id)}
         >
-          <DeleteOutlined />
-        </Button>
+          <Button
+            type='text'
+            style={{ marginLeft: 'auto' }}
+            // onClick={() => deleteTask(id)}
+          >
+            <DeleteOutlined />
+          </Button>
+        </Popconfirm>
       </div>
     </div>
   );
