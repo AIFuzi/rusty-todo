@@ -10,6 +10,7 @@ const AddTask = ({ projectId, tasks, newTask }) => {
   const [priority, setPriority] = useState('Low');
   const [taskName, setTaskName] = useState('');
   const [messageApi, contextHolder] = message.useMessage();
+  const [tag, setTag] = useState('');
 
   useEffect(() => {
     loadTasks();
@@ -31,14 +32,19 @@ const AddTask = ({ projectId, tasks, newTask }) => {
 
     await invoke('create_task', {
       projectId: projectId,
-      taskName: taskName,
+      taskName: tag == '' ? taskName : `[${tag}] - ${taskName}`,
       priority: priority,
     });
 
-    newTask([...tasks, { task_name: taskName, priority: priority }]);
+    newTask([...tasks, {
+      task_name: tag == '' ? taskName : `[${tag}] - ${taskName}`,
+      priority: priority,
+    }]);
 
     setPriority('Low');
     setTaskName('');
+    setTag('');
+
     setTaskModal(false);
   };
 
@@ -70,6 +76,13 @@ const AddTask = ({ projectId, tasks, newTask }) => {
             <Radio.Button value='Low'>Low priority</Radio.Button>
             <Radio.Button value='Medium'>Medium priority</Radio.Button>
             <Radio.Button value='High'>High priority</Radio.Button>
+          </Radio.Group>
+          <Title level={5}>Tags:</Title>
+          <Radio.Group value={tag} onChange={(e) => setTag(e.target.value)}>
+            <Radio.Button value=''>None</Radio.Button>
+            <Radio.Button value='NEW'>NEW</Radio.Button>
+            <Radio.Button value='BUG'>BUG</Radio.Button>
+            <Radio.Button value='UPDATE'>UPDATE</Radio.Button>
           </Radio.Group>
         </Space>
       </Modal>
