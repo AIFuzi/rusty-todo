@@ -18,17 +18,18 @@ pub mod task_store {
         project_id: i32,
         task_name: String,
         priority: String,
-    ) -> Result<(), sqlx::Error> {
-        sqlx::query(
-            "INSERT INTO tasks (project_id, task_name, priority, status) VALUES ($1, $2, $3, false); ",
+    ) -> Result<i32, sqlx::Error> {
+        let new_id: i32 = sqlx::query(
+            "INSERT INTO tasks (project_id, task_name, priority, status) VALUES ($1, $2, $3, false) RETURNING id; ",
         )
         .bind(project_id)
         .bind(task_name)
         .bind(priority)
-        .execute(pool)
-        .await?;
+        // .execute(pool)
+        .fetch_one(pool)
+        .await?.get("id");
 
-        Ok(())
+        Ok(new_id)
     }
 
     pub async fn get_tasks_by_project_id(

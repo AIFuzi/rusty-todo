@@ -11,12 +11,11 @@ pub mod task_service {
         project_id: i32,
         task_name: String,
         priority: String,
-    ) -> CommandResult<()> {
+    ) -> CommandResult<i32> {
         let pool = state.inner();
+        let new_id: i32 = task_store::create_task(pool, project_id, task_name, priority).await?;
 
-        task_store::create_task(pool, project_id, task_name, priority).await?;
-
-        Ok(())
+        Ok(new_id)
     }
 
     #[tauri::command]

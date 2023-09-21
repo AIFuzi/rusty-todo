@@ -11,11 +11,13 @@ pub mod project_service {
         state: State<'_, sqlx::PgPool>,
         user_login: String,
         project_name: String,
-    ) -> CommandResult<()> {
+    ) -> CommandResult<i32> {
         let pool = state.inner();
-        project_store::create_project(&pool, user_login, project_name).await?;
+        // project_store::create_project(&pool, user_login, project_name).await?;
 
-        Ok(())
+        let id = project_store::create_project(&pool, user_login, project_name).await?;
+
+        Ok(id)
     }
 
     #[tauri::command]

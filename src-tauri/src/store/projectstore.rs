@@ -15,16 +15,24 @@ pub mod project_store {
         pool: &sqlx::PgPool,
         user_login: String,
         project_name: String,
-    ) -> Result<(), sqlx::Error> {
-        let query = "INSERT INTO projects (user_login, project_name) VALUES ($1, $2)";
+    ) -> Result<i32, sqlx::Error> {
+        // let query = "INSERT INTO projects (user_login, project_name) VALUES ($1, $2)";
+        //
+        // sqlx::query(query)
+        //     .bind(user_login)
+        //     .bind(project_name)
+        //     .execute(pool)
+        //     .await?;
 
-        sqlx::query(query)
+        let query = "INSERT INTO projects (user_login, project_name) VALUES ($1, $2) RETURNING id";
+        let id: i32 = sqlx::query(query)
             .bind(user_login)
             .bind(project_name)
-            .execute(pool)
-            .await?;
+            .fetch_one(pool)
+            .await?
+            .get("id");
 
-        Ok(())
+        Ok(id)
     }
 
     pub async fn get_projects_by_user_login(
