@@ -13,10 +13,14 @@ const ProjectsScroll = ({ projectId, projectTitle }) => {
   const [projectName, setProjectName] = useState('');
   const [modalProject, setModalProject] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [newId, setNewId] = useState(0);
 
   useEffect(() => {
     getProjects();
   }, []);
+
+  useEffect(() => {
+  }, [newId]);
 
   const createProject = async () => {
     if (projectName.trim() == '') {
@@ -24,10 +28,12 @@ const ProjectsScroll = ({ projectId, projectTitle }) => {
       return;
     }
 
-    await invoke('create_project', {
-      userLogin: jwtDecode(localStorage.getItem('tok')).user_login,
-      projectName: projectName,
-    });
+    setNewId(
+      await invoke('create_project', {
+        userLogin: jwtDecode(localStorage.getItem('tok')).user_login,
+        projectName: projectName,
+      }),
+    );
     setProjects([...projects, { project_name: projectName }]);
 
     setProjectName('');
@@ -82,8 +88,8 @@ const ProjectsScroll = ({ projectId, projectTitle }) => {
           {projects.length > 0
             ? projects.map((project) => (
               <ProjectItem
-                key={project.id}
-                id={project.id}
+                key={project.id !== undefined ? project.id : project.id = newId}
+                id={project.id !== undefined ? project.id : project.id = newId}
                 getProjId={projectId}
                 name={project.project_name}
                 getProject={projectTitle}

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { getErrorMessage } from '../../messages/message';
 import { invoke } from '@tauri-apps/api';
 
-const AddTask = ({ projectId, tasks, newTask }) => {
+const AddTask = ({ newId, projectId, tasks, newTask }) => {
   const [taskModal, setTaskModal] = useState(false);
   const [priority, setPriority] = useState('Low');
   const [taskName, setTaskName] = useState('');
@@ -30,11 +30,13 @@ const AddTask = ({ projectId, tasks, newTask }) => {
       return;
     }
 
-    await invoke('create_task', {
-      projectId: projectId,
-      taskName: tag == '' ? taskName : `[${tag}] - ${taskName}`,
-      priority: priority,
-    });
+    newId(
+      await invoke('create_task', {
+        projectId: projectId,
+        taskName: tag == '' ? taskName : `[${tag}] - ${taskName}`,
+        priority: priority,
+      }),
+    );
 
     newTask([...tasks, {
       task_name: tag == '' ? taskName : `[${tag}] - ${taskName}`,

@@ -11,6 +11,10 @@ import SortSelect from './SortSelect';
 const TasksPanel = ({ projectId, projectTitle, username }) => {
   const [tasks, setTasks] = useState([]);
   const [percent, setPercent] = useState(0);
+  const [newId, setNewId] = useState(0);
+
+  useEffect(() => {
+  }, [newId]);
 
   useEffect(() => {
     setPercent(
@@ -51,8 +55,8 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
                 ? <Empty description='Create first task' />
                 : tasks.map((task) => (
                   <TaskItem
-                    key={task.id}
-                    id={task.id}
+                    key={task.id !== undefined ? task.id : task.id = newId}
+                    id={task.id !== undefined ? task.id : task.id = newId}
                     priority={task.priority}
                     label={task.task_name}
                     loadStatus={task.status}
@@ -63,7 +67,12 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
           </div>
         </div>
         <div className={todoStyle.task__addinput}>
-          <AddTask projectId={projectId} newTask={setTasks} tasks={tasks} />
+          <AddTask
+            newId={setNewId}
+            projectId={projectId}
+            newTask={setTasks}
+            tasks={tasks}
+          />
         </div>
       </div>
     </div>

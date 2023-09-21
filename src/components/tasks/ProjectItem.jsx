@@ -5,7 +5,7 @@ import { CloseOutlined } from '@ant-design/icons';
 
 const ProjectItem = ({ id, getProjId, name, getProject, deleteProject }) => {
   const getId = () => {
-    getProject(`${name}`);
+    getProject(`${name}:${id}`);
     getProjId(id);
   };
 
