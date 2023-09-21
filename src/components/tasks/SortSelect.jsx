@@ -1,5 +1,5 @@
 import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, Space } from 'antd';
+import { Dropdown, Select, Space } from 'antd';
 import Link from 'antd/es/typography/Link';
 import React from 'react';
 
@@ -20,14 +20,9 @@ const SortSelect = () => {
   ];
 
   return (
-    <Dropdown menu={{ items }}>
-      <Link>
-        <Space>
-          Sort by
-          <DownOutlined />
-        </Space>
-      </Link>
-    </Dropdown>
+    <div>
+      awdaw
+    </div>
   );
 };
 

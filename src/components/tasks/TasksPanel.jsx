@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import todoStyle from '../../styles/todo.module.css';
 import Title from 'antd/es/typography/Title';
 import ProjectTitle from './ProjectTitle';
-import { Empty, Progress } from 'antd';
+import { Empty, Progress, Select } from 'antd';
 import TaskItem from './TaskItem';
 import AddTask from './AddTask';
 import { invoke } from '@tauri-apps/api';
@@ -29,6 +29,10 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
     setTasks(tasks.filter((p) => p.id !== id));
   };
 
+  const sortTasks = (sort) => {
+    setTasks([...tasks].sort((a, b) => a[sort].localeCompare(b[sort])));
+  };
+
   return (
     <div className={todoStyle.todo__center__pannel}>
       <div className={todoStyle.todo__center__wrap}>
@@ -47,7 +51,15 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
         <div className={todoStyle.tasks__wrap}>
           <div className={todoStyle.tasks__title}>
             <Title level={3}>Tasks:</Title>
-            <SortSelect />
+            <Select
+              onChange={sortTasks}
+              defaultValue='sort'
+              options={[
+                { value: 'sort', label: 'Sort by', disabled: true },
+                { value: 'task_name', label: 'Name' },
+                { value: 'priority', label: 'Priority' },
+              ]}
+            />
           </div>
           <div className={todoStyle.task__scroll}>
             <div className={todoStyle.tasks__completed}>
