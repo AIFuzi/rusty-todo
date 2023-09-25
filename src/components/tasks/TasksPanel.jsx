@@ -6,7 +6,7 @@ import { Empty, Progress, Select } from 'antd';
 import TaskItem from './TaskItem';
 import AddTask from './AddTask';
 import { invoke } from '@tauri-apps/api';
-import SortSelect from './SortSelect';
+import DatePanel from '../DatePanel';
 
 const TasksPanel = ({ projectId, projectTitle, username }) => {
   const [tasks, setTasks] = useState([]);
@@ -17,11 +17,11 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
   }, [newId]);
 
   useEffect(() => {
-    setPercent(
-      Math.round(
-        (tasks.filter((p) => p.status == true).length / tasks.length) * 100,
-      ),
-    );
+    // setPercent(
+    //   Math.round(
+    //     (tasks.filter((p) => p.status == true).length / tasks.length) * 100,
+    //   ),
+    // );
   }, []);
 
   const deleteTask = async (id) => {
@@ -38,11 +38,7 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
       <div className={todoStyle.todo__center__wrap}>
         <ProjectTitle username={username} projectTitle={projectTitle} />
         <div className={todoStyle.stats__wrap}>
-          <div className={todoStyle.stats__day}>
-            <h2>WED</h2>
-            <h1>13</h1>
-            <h3>SEPTEMBER</h3>
-          </div>
+          <DatePanel />
           <Progress
             type='circle'
             percent={percent}
