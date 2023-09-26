@@ -12,17 +12,10 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
   const [tasks, setTasks] = useState([]);
   const [percent, setPercent] = useState(0);
   const [newId, setNewId] = useState(0);
+  const [compledTasks, setCompletedTasks] = useState([]);
 
   useEffect(() => {
   }, [newId]);
-
-  useEffect(() => {
-    // setPercent(
-    //   Math.round(
-    //     (tasks.filter((p) => p.status == true).length / tasks.length) * 100,
-    //   ),
-    // );
-  }, []);
 
   const deleteTask = async (id) => {
     await invoke('delete_task_by_id', { taskId: id });

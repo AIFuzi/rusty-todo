@@ -4,7 +4,9 @@ import { Button, Checkbox, Popconfirm } from 'antd';
 import { invoke } from '@tauri-apps/api';
 import { DeleteOutlined } from '@ant-design/icons';
 
-const TaskItem = ({ id, label, priority, loadStatus, deleteTask }) => {
+const TaskItem = (
+  { id, label, priority, loadStatus, deleteTask },
+) => {
   const [status, setStatus] = useState(loadStatus);
 
   const getPriorityColor = () => {
