@@ -12,7 +12,7 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
   const [tasks, setTasks] = useState([]);
   const [percent, setPercent] = useState(0);
   const [newId, setNewId] = useState(0);
-  const [compledTasks, setCompletedTasks] = useState([]);
+  // const [compledTasks, setCompletedTasks] = useState([]);
 
   useEffect(() => {
   }, [newId]);
@@ -32,10 +32,10 @@ const TasksPanel = ({ projectId, projectTitle, username }) => {
         <ProjectTitle username={username} projectTitle={projectTitle} />
         <div className={todoStyle.stats__wrap}>
           <DatePanel />
-          <Progress
-            type='circle'
-            percent={percent}
-          />
+          {/* <Progress */}
+          {/*   type='circle' */}
+          {/*   percent={percent} */}
+          {/* /> */}
         </div>
         <div className={todoStyle.tasks__wrap}>
           <div className={todoStyle.tasks__title}>
